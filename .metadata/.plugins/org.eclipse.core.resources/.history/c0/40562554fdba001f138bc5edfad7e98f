@@ -1,0 +1,11 @@
+package com.booking.service;
+
+import com.booking.dto.ApiResponseDto;
+import com.booking.dto.BookingDto;
+
+public interface BookingService {
+
+    BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCode);
+
+    void deleteBooking(String bookingId);
+}

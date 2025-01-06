@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.FeignClient"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="com.booking.service.PromoCodeClient"/>
+    <fullyQualifiedTypeName name="com.booking.exception.BookingNotFoundException"/>
+    <fullyQualifiedTypeName name="com.booking.entity.Booking"/>
+    <fullyQualifiedTypeName name="com.booking.dto.EventDto"/>
+    <fullyQualifiedTypeName name="com.booking.service.ApiClient"/>
+    <fullyQualifiedTypeName name="jakarta.ws.rs.Path"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="java.util.UUID"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.client.discovery.EnableDiscoveryClient"/>
+</qualifiedTypeNameHistroy>

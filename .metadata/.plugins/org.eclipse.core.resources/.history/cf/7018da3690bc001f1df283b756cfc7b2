@@ -1,0 +1,13 @@
+spring.application.name=API-GATEWAY
+server.port=9091
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+## Routes for Booking Service
+spring.cloud.gateway.routes[0].id=Booking-Service
+spring.cloud.gateway.routes[0].uri=lb://Booking-Service
+spring.cloud.gateway.routes[0].predicates[0]=Path=/booking/**
+
+## Routes for EventService Service
+spring.cloud.gateway.routes[1].id=Event-Service
+spring.cloud.gateway.routes[1].uri=lb://Event-Service
+spring.cloud.gateway.routes[1].predicates[0]=Path=/event/**
+

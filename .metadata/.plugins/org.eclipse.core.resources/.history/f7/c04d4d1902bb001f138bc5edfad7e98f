@@ -1,0 +1,74 @@
+package com.booking.service.impl;
+
+import com.booking.dto.BookingDto;
+import com.booking.dto.EventDto;
+import com.booking.dto.PromoCodeDto;
+import com.booking.entity.Booking;
+import com.booking.exception.BookingNotFoundException;
+import com.booking.exception.IncorrectAmountException;
+import com.booking.exception.InsufficientSeatsException;
+import com.booking.repository.BookingRepository;
+import com.booking.service.ApiClient;
+import com.booking.service.BookingService;
+import com.booking.service.PromoCodeClient;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+@Service
+public class BookingServiceImpl implements BookingService {
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ApiClient apiClient;
+
+    @Autowired
+    private PromoCodeClient promoCodeClient;
+    
+    @Override
+    public BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCode) {
+
+        Booking booking = modelMapper.map(bookingDto, Booking.class);
+
+        EventDto eventDto = apiClient.getEventById(eventId);
+
+        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCode);
+
+        if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
+            if (booking.getNumberOfTickets() > eventDto.getSeats()) {
+                throw new InsufficientSeatsException("Seat Number Exceeded");
+            } else {
+                eventDto.setSeats(eventDto.getSeats() - booking.getNumberOfTickets());
+                apiClient.updateEvent(eventDto, eventDto.getEventId());
+            }
+
+            int expectedPrice = eventDto.getEventPrice() * booking.getNumberOfTickets();
+            if (promoCodeDto != null) {
+                double discount = promoCodeDto.getDiscount(); // e.g., 10 for 10%
+                expectedPrice = (int) (expectedPrice * (1 - discount / 100));
+            }
+            
+            if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
+                throw new IncorrectAmountException("Please enter the correct amount.");
+            }
+
+        }
+        Booking booking1 = bookingRepository.save(booking);
+        BookingDto bookingDto1 = modelMapper.map(booking1, BookingDto.class);
+        return bookingDto1;
+    }
+
+    @Override
+    public void deleteBooking(String bookingId) {
+    	Booking booking = bookingRepository.findById(bookingId).orElseThrow(()-> new BookingNotFoundException("Booking Not Found With Given Id" + bookingId));
+    	bookingRepository.delete(booking);
+    }
+}

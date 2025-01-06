@@ -1,0 +1,17 @@
+package com.booking.service;
+
+import com.booking.dto.EventDto;
+import com.booking.dto.PromoCodeDto;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient(name = "EVENT-SERVICE")
+public interface ApiClient {
+
+    @GetMapping("/event/{eventId}")
+    EventDto getEventById(@PathVariable String eventId);
+
+}
