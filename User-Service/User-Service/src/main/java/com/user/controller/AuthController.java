@@ -14,10 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,7 +40,11 @@ public class AuthController {
         this.doAuthenticate(jwtRequest.getEmailId(), jwtRequest.getPassword());
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtRequest.getEmailId());
 
-        String token = jwtHelper.generateToken(userDetails);
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .toList();
+
+        String token = jwtHelper.generateToken(userDetails, roles);
         JwtResponse jwtResponse = JwtResponse
                 .builder()
                 .jwtToken(token)
@@ -55,11 +58,18 @@ public class AuthController {
 
     private void doAuthenticate(String emailId, String password) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(emailId, password);
-        try{
+        try {
             authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (BadCredentialsException e) {
 
         }
+    }
+
+
+    @GetMapping("/validate")
+    public String validateToken(@RequestParam("token") String token) {
+        jwtHelper.validateToken(token);
+        return "Token is valid";
     }
 
 

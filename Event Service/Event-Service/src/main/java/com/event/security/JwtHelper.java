@@ -1,28 +1,20 @@
-package com.user.security;
+package com.event.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.security.KeyRep.Type.SECRET;
-
 @Component
 public class JwtHelper {
 
-
-    //    1. validity
-    //validity in millis
     public static final long TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
 
 
@@ -56,19 +48,16 @@ public class JwtHelper {
     }
 
 
-
-    public void validateToken(final String token) {
-        Jwts.parser().setSigningKey(getSignKey()).build().parseClaimsJws(token);
-    }
-    private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     //check if the token has expired
     public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
+    }
+
+
+    // Retrieve roles from token
+    public List<String> getRolesFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get("roles", List.class));
     }
 
     //retrieve expiration date from jwt token
@@ -77,9 +66,8 @@ public class JwtHelper {
     }
 
     //generate token for user
-    public String generateToken(UserDetails userDetails, List<String> roles) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles",roles);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -93,7 +81,5 @@ public class JwtHelper {
                         .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
                         .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
     }
-
-
 
 }

@@ -2,6 +2,8 @@ package com.user.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -18,4 +20,6 @@ public class UserDto {
     private String emailId;
 
     private String password;
+
+    private List<String> roles;
 }

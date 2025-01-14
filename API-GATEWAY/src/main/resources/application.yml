@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: API-GATEWAY
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      routes:
+        - id: BOOKING-SERVICE
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/booking/**
+          filters:
+            - AuthenticationFilter
+        - id: EVENT-SERVICE
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/event/**
+          filters:
+            - AuthenticationFilter
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/** , /auth/login
+#            - Path=
+        - id: PROJECT-FOR-PROMOCODE
+          uri: lb://PROJECT-FOR-PROMOCODE
+          predicates:
+            - Path=/promocode/**
+          filters:
+            - AuthenticationFilter
+
+server:
+  port: 9091
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

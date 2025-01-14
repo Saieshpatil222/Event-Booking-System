@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,19 +51,23 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeHttpRequests(request -> {
-
-            request.requestMatchers("/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/user").permitAll().anyRequest().authenticated();
-
-        });
-
+        http.csrf().disable()
+                .authorizeHttpRequests(request -> {
+                    request.requestMatchers("/auth/login").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/user").permitAll() // General access
+                            .requestMatchers(HttpMethod.POST, "/user/**").hasRole("ADMIN") // Admin-only access
+                            .anyRequest().authenticated();
+                })
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

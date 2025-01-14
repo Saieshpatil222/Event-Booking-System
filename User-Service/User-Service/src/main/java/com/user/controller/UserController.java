@@ -6,6 +6,7 @@ import com.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,12 +32,14 @@ public class UserController {
 
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getSingleUser(@PathVariable String userId) {
         UserDto userDto = userService.getSingleUser(userId);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> userDto1 = userService.getAllUsers();
         return new ResponseEntity<>(userDto1, HttpStatus.OK);

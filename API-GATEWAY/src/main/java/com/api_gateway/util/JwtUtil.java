@@ -1,24 +1,21 @@
-package com.user.security;
+package com.api_gateway.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static java.security.KeyRep.Type.SECRET;
-
 @Component
-public class JwtHelper {
+public class JwtUtil {
 
 
     //    1. validity
@@ -77,11 +74,10 @@ public class JwtHelper {
     }
 
     //generate token for user
-    public String generateToken(UserDetails userDetails, List<String> roles) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("roles",roles);
-        return doGenerateToken(claims, userDetails.getUsername());
-    }
+//    public String generateToken(UserDetails userDetails) {
+//        Map<String, Object> claims = new HashMap<>();
+//        return doGenerateToken(claims, userDetails.getUsername());
+//    }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
@@ -93,7 +89,5 @@ public class JwtHelper {
                         .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
                         .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
     }
-
-
 
 }

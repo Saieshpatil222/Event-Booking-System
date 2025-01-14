@@ -57,7 +57,7 @@ public class BookingServiceImpl implements BookingService {
 
         PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCode);
 
-        logger.info("Proocode: {}", promoCodeDto);
+        logger.info("PromoCode: {}", promoCodeDto);
 
         if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
             if (booking.getNumberOfTickets() > eventDto.getSeats()) {
@@ -78,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
             int updatedPrice = price - promoCodeDto.getDiscount();
             booking.setPrice(updatedPrice);
         }
-
+        booking.setStatus(bookingDto.getStatus());
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);
     }

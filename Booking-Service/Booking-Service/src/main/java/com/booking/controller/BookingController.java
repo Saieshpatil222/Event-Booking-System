@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,12 +55,14 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BookingDto> getSingleBooking(@PathVariable String bookingId) {
         BookingDto bookingDto = bookingService.getSingleBooking(bookingId);
         return new ResponseEntity<>(bookingDto, HttpStatus.OK);
     }
 
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BookingDto>> getAllBookings() {
         List<BookingDto> bookingDto = bookingService.getAllBookings();
         return new ResponseEntity<>(bookingDto, HttpStatus.OK);

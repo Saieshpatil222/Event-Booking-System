@@ -1,21 +1,23 @@
 package com.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class User implements UserDetails{
+@Document
+public class User implements UserDetails {
 
     @Id
     private String userId;
@@ -28,20 +30,30 @@ public class User implements UserDetails{
 
     private String password;
 
+    private List<String> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public String getUsername() {
-        return emailId;
+        return emailId; // Email ID used for login purposes.
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
+
+    public String getRealUserName() {
+        return userName;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

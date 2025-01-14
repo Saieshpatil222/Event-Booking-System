@@ -7,6 +7,7 @@ import com.user.repository.UserRepository;
 import com.user.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +23,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDto createUser(UserDto userDto) {
 
         User user = modelMapper.map(userDto, User.class);
         user.setUserId(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRoles(List.of("ROLE_NORMAL"));
         User user1 = userRepository.save(user);
         return modelMapper.map(user1, UserDto.class);
 
@@ -35,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getSingleUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId =" + userId));
-        UserDto dto = modelMapper.map(user,UserDto.class);
+        UserDto dto = modelMapper.map(user, UserDto.class);
         return dto;
     }
 
