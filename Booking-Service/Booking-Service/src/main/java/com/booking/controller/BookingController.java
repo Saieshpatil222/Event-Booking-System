@@ -36,12 +36,12 @@ public class BookingController {
         return new ResponseEntity<>(bookingDto1, HttpStatus.OK);
     }
 
-    // Fallback method with a new BookingDto instance
+    
     public ResponseEntity<BookingDto> eventPromocodeFallback(BookingDto bookingDto, String userId, String eventId, String promoCode, Throwable e) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
         logger.error("Service unavailable, falling back to dummy booking.", e);
 
-        // Create a new BookingDto for the fallback response
+    
         BookingDto fallbackBookingDto = new BookingDto();
         fallbackBookingDto.setBookingId(UUID.randomUUID().toString());
         fallbackBookingDto.setEventId(eventId);
