@@ -83,6 +83,40 @@ public class BookingServiceImpl implements BookingService {
         return modelMapper.map(booking1, BookingDto.class);
     }
 
+    @Override
+    public BookingDto createBookingWithoutPromocode(BookingDto bookingDto, String eventId, String userId) {
+
+        Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+
+        Booking booking = modelMapper.map(bookingDto, Booking.class);
+
+        booking.setEventId(eventId);
+
+        booking.setUserId(userId);
+
+        booking.setBookingId(UUID.randomUUID().toString());
+
+        EventDto eventDto = apiClient.getEventById(eventId);
+        logger.info("Event : {} ", eventDto);
+
+        if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
+            if (booking.getNumberOfTickets() > eventDto.getSeats()) {
+                throw new InsufficientSeatsException("Seat Number Exceeded");
+            } else {
+                eventDto.setSeats(eventDto.getSeats() - booking.getNumberOfTickets());
+                apiClient.updateEvent(eventDto, eventDto.getEventId());
+            }
+
+            if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
+                throw new IncorrectAmountException("Please enter the correct amount.");
+            }
+
+        }
+        booking.setStatus(bookingDto.getStatus());
+        Booking booking1 = bookingRepository.save(booking);
+        return modelMapper.map(booking1, BookingDto.class);
+    }
+
 
     @Override
     public void deleteBooking(String bookingId) {

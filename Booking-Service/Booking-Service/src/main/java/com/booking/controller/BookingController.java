@@ -68,6 +68,15 @@ public class BookingController {
         return new ResponseEntity<>(bookingDto, HttpStatus.OK);
     }
 
+    @PostMapping("/{userId}/{eventId}")
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
+                                                    @PathVariable String eventId) {
+
+        BookingDto bookingDto1 = bookingService.createBookingWithoutPromocode(bookingDto, eventId, userId);
+        return new ResponseEntity<>(bookingDto1, HttpStatus.OK);
+    }
+
+
     @DeleteMapping("/{bookingId}")
     public ResponseEntity<ApiResponseDto> deleteBooking(@PathVariable String bookingId) {
         bookingService.deleteBooking(bookingId);
