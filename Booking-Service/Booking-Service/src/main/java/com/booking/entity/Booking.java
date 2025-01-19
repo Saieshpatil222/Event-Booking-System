@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Booking {
 
-    @org.springframework.data.annotation.Id
+    @Id
     private String bookingId;
 
     private String userId;
@@ -30,6 +31,16 @@ public class Booking {
     private String status;
 
     private String promoCode;
+
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getBookingId() {
         return bookingId;

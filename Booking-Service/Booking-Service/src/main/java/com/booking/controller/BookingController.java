@@ -23,11 +23,11 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @PostMapping("/{userId}/{eventId}/{promoCode}")
+    @PostMapping("/{userId}/{eventId}/{promoCodeId}")
     @CircuitBreaker(name = "eventPromocodeBreaker", fallbackMethod = "eventPromocodeFallback")
     @Retry(name = "eventPromocodeRetry", fallbackMethod = "eventPromocodeFallback")
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
-                                                    @PathVariable String eventId, @PathVariable String promoCode) {
+                                                    @PathVariable String eventId, @PathVariable("promoCodeId") String promoCode) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
         logger.info(
                 "Booking Dto: {} ", bookingDto
@@ -36,12 +36,12 @@ public class BookingController {
         return new ResponseEntity<>(bookingDto1, HttpStatus.OK);
     }
 
-    
+
     public ResponseEntity<BookingDto> eventPromocodeFallback(BookingDto bookingDto, String userId, String eventId, String promoCode, Throwable e) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
         logger.error("Service unavailable, falling back to dummy booking.", e);
 
-    
+
         BookingDto fallbackBookingDto = new BookingDto();
         fallbackBookingDto.setBookingId(UUID.randomUUID().toString());
         fallbackBookingDto.setEventId(eventId);
@@ -72,7 +72,7 @@ public class BookingController {
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
                                                     @PathVariable String eventId) {
 
-        BookingDto bookingDto1 = bookingService.createBookingWithoutPromocode(bookingDto, eventId, userId);
+        BookingDto bookingDto1 = bookingService.createBookingWithoutPromoCode(bookingDto, eventId, userId);
         return new ResponseEntity<>(bookingDto1, HttpStatus.OK);
     }
 
@@ -87,4 +87,5 @@ public class BookingController {
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
 }

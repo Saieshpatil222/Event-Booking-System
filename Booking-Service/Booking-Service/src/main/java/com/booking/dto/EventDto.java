@@ -21,6 +21,8 @@ public class EventDto {
 
     private int seats;
 
+    private String address;
+
 
     public String getEventId() {
         return eventId;
@@ -61,6 +63,15 @@ public class EventDto {
     public void setSeats(int seats) {
         this.seats = seats;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
 
 
 }

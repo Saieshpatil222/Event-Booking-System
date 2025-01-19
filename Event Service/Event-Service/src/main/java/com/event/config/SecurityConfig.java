@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.POST, "/event").hasRole("ADMIN")// General access
-                            .requestMatchers(HttpMethod.GET, "/event/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/event/**").hasAnyRole("ADMIN","USER")
                             .requestMatchers(HttpMethod.DELETE, "/event/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/event/**").hasRole("ADMIN")// Admin-only access
                             .anyRequest().authenticated();

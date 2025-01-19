@@ -22,8 +22,10 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
+
     @Autowired
     private JwtHelper jwtHelper;
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -51,8 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
             if (userName.equals(userDetails.getUsername()) && !jwtHelper.isTokenExpired(token)) {
+
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));//It enriches the authentication object with information like
+                // the IP address and session ID from the request, which can be useful for auditing or security checks.
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

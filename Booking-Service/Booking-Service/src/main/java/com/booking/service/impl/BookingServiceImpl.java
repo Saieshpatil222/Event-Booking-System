@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,8 +38,11 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private PromoCodeClient promoCodeClient;
 
+    @Autowired
+    private WebClient webClient;
+
     @Override
-    public BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCode) {
+    public BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCodeId) {
 
         Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
 
@@ -50,12 +54,13 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingId(UUID.randomUUID().toString());
 
-        booking.setPromoCode(promoCode);
+        booking.setPromoCode(promoCodeId);
 
         EventDto eventDto = apiClient.getEventById(eventId);
+        //EventDto eventDto =
         logger.info("Event : {} ", eventDto);
 
-        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCode);
+        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCodeId);
 
         logger.info("PromoCode: {}", promoCodeDto);
 
@@ -84,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto createBookingWithoutPromocode(BookingDto bookingDto, String eventId, String userId) {
+    public BookingDto createBookingWithoutPromoCode(BookingDto bookingDto, String eventId, String userId) {
 
         Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
 
@@ -113,6 +118,7 @@ public class BookingServiceImpl implements BookingService {
 
         }
         booking.setStatus(bookingDto.getStatus());
+        booking.setAddress(eventDto.getAddress());
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);
     }

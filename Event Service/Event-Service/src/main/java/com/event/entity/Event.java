@@ -23,4 +23,6 @@ public class Event {
     private Date eventSchedule;
 
     private int seats;
+
+    private String address;
 }

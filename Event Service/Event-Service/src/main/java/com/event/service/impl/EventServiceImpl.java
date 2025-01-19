@@ -54,6 +54,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found with Given Id " + eventId));
         event.setEventPrice(eventDto.getEventPrice());
         event.setSeats(eventDto.getSeats());
+        event.setAddress(eventDto.getAddress());
         Event updatedEvent = eventRepository.save(event);
         return modelMapper.map(updatedEvent, EventDto.class);
     }

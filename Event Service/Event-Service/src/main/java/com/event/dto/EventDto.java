@@ -21,4 +21,6 @@ public class EventDto {
 
     private int seats;
 
+    private String address;
+
 }

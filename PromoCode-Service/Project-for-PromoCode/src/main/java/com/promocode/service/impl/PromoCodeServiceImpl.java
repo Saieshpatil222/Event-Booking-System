@@ -47,7 +47,7 @@ public class PromoCodeServiceImpl implements PromoCodeService {
 
     @Override
     public PromoCodeDto getPromoCode(String promoCode) {
-        PromoCode promoCode1 = promoCodeRepository.findByPromoCode(promoCode);//.orElseThrow(() -> new ResourceNotFoundException("PromoCode Not Found " + promoCodeId));
+        PromoCode promoCode1 = promoCodeRepository.findByPromocodeId(promoCode);//.orElseThrow(() -> new ResourceNotFoundException("PromoCode Not Found " + promoCodeId));
         //promoCode1.setPromocodeId(promoCode1.getPromocodeId());
         return modelMapper.map(promoCode1, PromoCodeDto.class);
     }

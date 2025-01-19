@@ -65,44 +65,4 @@ public class AuthController {
         }
     }
 
-
-    @GetMapping("/validate")
-    public String validateToken(@RequestParam("token") String token) {
-        jwtHelper.validateToken(token);
-        return "Token is valid";
-    }
-
-
-//    @PostMapping("/generate-token")
-//    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-//
-//        logger.info("Username {} ,  Password {}", request.getEmail(), request.getPassword());
-//
-//        this.doAuthenticate(request.getEmail(), request.getPassword());
-//
-//        User user = (User) userDetailsService.loadUserByUsername(request.getEmail());
-//
-//        ///.. generate token...
-//        String token = jwtHelper.generateToken(user);
-//        //send karna hai response
-//
-//        // Refresh Token
-//
-//        RefreshTokenDto refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
-//
-//
-//        JwtResponse jwtResponse = JwtResponse
-//                .builder()
-//                .token(token)
-//                .user(modelMapper.map(user, UserDto.class))
-//                .refreshToken(refreshToken)
-//                .build();
-//
-//
-//        return ResponseEntity.ok(jwtResponse);
-//
-//
-//    }
-
-
 }

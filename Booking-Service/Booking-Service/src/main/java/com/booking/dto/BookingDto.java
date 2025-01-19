@@ -22,6 +22,16 @@ public class BookingDto {
 
     private String eventId;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    private String address;
+
     private String eventName;
 
     public String getPromoCode() {

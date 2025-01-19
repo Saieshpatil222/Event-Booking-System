@@ -1,5 +1,6 @@
 package com.api_gateway.security;
 
+import com.api_gateway.exception.InvalidAuthorizationHeader;
 import com.api_gateway.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -23,18 +24,21 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
-            if (routeValidator.isSecured.test(exchange.getRequest())) {
+            if (routeValidator.isSecured.test(exchange.getRequest()))//The purpose of this line is to decide whether the request needs authentication.//
+            {
                 //header contains token or not
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new RuntimeException("Missing Authorization Header!!!!");
+
+                    throw new InvalidAuthorizationHeader("Invalid Header");
                 }
+
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                //The above line is used to extract the Authorization header from the incoming request.
+
                 if (authHeader != null && authHeader.startsWith("Bearer")) {
                     authHeader = authHeader.substring(7);
                 }
                 try {
-                    //REST CALL TO AUTH SERVICE
-                    //restTemplate.getForObject("http://USER-SERVICE//validate?token" + authHeader, String.class);
                     jwtUtil.validateToken(authHeader);
                 } catch (Exception e) {
                     System.out.println("Invalid Call....");

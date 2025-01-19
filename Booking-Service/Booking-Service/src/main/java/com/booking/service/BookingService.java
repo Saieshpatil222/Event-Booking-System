@@ -8,7 +8,7 @@ public interface BookingService {
 
     BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCode);
 
-    BookingDto createBookingWithoutPromocode(BookingDto bookingDto,String eventId, String userId);
+    BookingDto createBookingWithoutPromoCode(BookingDto bookingDto,String eventId, String userId);
 
     void deleteBooking(String bookingId);
 
