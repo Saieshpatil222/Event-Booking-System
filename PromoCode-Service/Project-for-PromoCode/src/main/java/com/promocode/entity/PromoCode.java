@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class PromoCode {
 
     @Id
-    private String promocodeId;
+    private String promoCodeId;
 
     private String promoCode;
 

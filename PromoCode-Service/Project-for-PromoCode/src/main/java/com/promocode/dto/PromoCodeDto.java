@@ -10,7 +10,7 @@ import lombok.*;
 public class PromoCodeDto {
 
 
-    private String promocodeId;
+    private String promoCodeId;
 
     private String promoCode;
 

@@ -54,13 +54,13 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingId(UUID.randomUUID().toString());
 
-        booking.setPromoCode(promoCodeId);
-
         EventDto eventDto = apiClient.getEventById(eventId);
-        //EventDto eventDto =
+
         logger.info("Event : {} ", eventDto);
 
         PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCodeId);
+
+        booking.setPromoCode(promoCodeDto.getPromoCode());
 
         logger.info("PromoCode: {}", promoCodeDto);
 
@@ -84,6 +84,7 @@ public class BookingServiceImpl implements BookingService {
             booking.setPrice(updatedPrice);
         }
         booking.setStatus(bookingDto.getStatus());
+        booking.setAddress(eventDto.getAddress());
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);
     }
