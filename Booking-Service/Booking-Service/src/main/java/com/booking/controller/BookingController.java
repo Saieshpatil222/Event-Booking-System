@@ -24,8 +24,8 @@ public class BookingController {
     private BookingService bookingService;
 
     @PostMapping("/{userId}/{eventId}/{promoCodeId}")
-    @CircuitBreaker(name = "eventPromocodeBreaker", fallbackMethod = "eventPromocodeFallback")
-    @Retry(name = "eventPromocodeRetry", fallbackMethod = "eventPromocodeFallback")
+    @CircuitBreaker(name = "eventPromoCodeBreaker", fallbackMethod = "eventPromoCodeFallback")
+    @Retry(name = "eventPromoCodeRetry", fallbackMethod = "eventPromoCodeFallback")
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
                                                     @PathVariable String eventId, @PathVariable("promoCodeId") String promoCode) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
@@ -37,7 +37,7 @@ public class BookingController {
     }
 
 
-    public ResponseEntity<BookingDto> eventPromocodeFallback(BookingDto bookingDto, String userId, String eventId, String promoCode, Throwable e) {
+    public ResponseEntity<BookingDto> eventPromoCodeFallback(BookingDto bookingDto, String userId, String eventId, String promoCode, Throwable e) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
         logger.error("Service unavailable, falling back to dummy booking.", e);
 

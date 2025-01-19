@@ -33,7 +33,7 @@ public class PromoCodeController {
 	}
 
 	@GetMapping("/{promoCode}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
 	public ResponseEntity<PromoCodeDto> getPromoCode(@PathVariable String promoCode) {
 		PromoCodeDto codeDto = promoCodeService.getPromoCode(promoCode);
 		return new ResponseEntity<>(codeDto, HttpStatus.OK);

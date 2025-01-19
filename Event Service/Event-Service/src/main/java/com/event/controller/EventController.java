@@ -33,7 +33,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
     public ResponseEntity<EventDto> getEventById(@PathVariable String eventId) {
         EventDto eventDto = eventService.getSingleEvent(eventId);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
@@ -48,7 +48,7 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
     public ResponseEntity<EventDto> updateEvent(@PathVariable String eventId, @RequestBody EventDto eventDto) {
         EventDto eventDto1 = eventService.updateEvent(eventId, eventDto);
         return new ResponseEntity<>(eventDto1, HttpStatus.OK);
