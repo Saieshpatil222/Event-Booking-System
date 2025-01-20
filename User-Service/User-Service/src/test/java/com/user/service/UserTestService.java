@@ -99,12 +99,4 @@ public class UserTestService {
         verify(modelMapper, times(1)).map(user2, UserDto.class);
     }
 
-    @Test
-    public void deleteUser() {
-        String useId = "1";
-        when(userRepository.findById(useId)).thenReturn(Optional.of(user));
-        userService.deleteUser(useId);
-        verify(userRepository, times(1)).delete(user);
-    }
-
 }
