@@ -1,9 +1,6 @@
 package com.user.service;
 
-import com.user.dto.ApiResponseDto;
 import com.user.dto.UserDto;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 public interface UserService {

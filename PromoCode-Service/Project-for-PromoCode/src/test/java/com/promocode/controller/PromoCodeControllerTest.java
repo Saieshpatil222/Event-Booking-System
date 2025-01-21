@@ -46,8 +46,7 @@ public class PromoCodeControllerTest {
                 .build();
 
         // Setup response DTO (includes generated ID)
-        responseDto = PromoCodeDto.builder()
-                .promocodeId(UUID.randomUUID().toString())
+        responseDto = PromoCodeDto.builder().promoCodeId(UUID.randomUUID().toString())
                 .promoCode("SUMMER2025")
                 .discount(20)
                 .build();
