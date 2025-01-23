@@ -120,6 +120,7 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.setStatus(bookingDto.getStatus());
         booking.setAddress(eventDto.getAddress());
+        booking.setPromoCode("");
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);
     }

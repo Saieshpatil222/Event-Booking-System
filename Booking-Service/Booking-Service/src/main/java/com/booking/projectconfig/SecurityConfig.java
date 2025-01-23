@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.POST, "/booking").permitAll() // General access
                             .requestMatchers(HttpMethod.GET, "/booking/**").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/booking/**").hasRole("USER,ADMIN")// Admin-only access
+                            .requestMatchers(HttpMethod.DELETE, "/booking/**").hasAnyAuthority("ROLE_NORMAL", "ROLE_ADMIN")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session

@@ -24,7 +24,7 @@ public class User implements UserDetails {
 
     private String userName;
 
-    private int mobileNumber;
+    private long mobileNumber;
 
     private String emailId;
 

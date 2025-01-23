@@ -46,12 +46,12 @@ public class BookingController {
         fallbackBookingDto.setBookingId(UUID.randomUUID().toString());
         fallbackBookingDto.setEventId(eventId);
         fallbackBookingDto.setPromoCode(promoCode);
-        fallbackBookingDto.setEventName("cjhavcugqv");  // Set a dummy event name
+        fallbackBookingDto.setEventName("cjhavcugqv");
         fallbackBookingDto.setUserId(userId);
-        fallbackBookingDto.setPrice(456789);  // Dummy price
-        fallbackBookingDto.setNumberOfTickets(2);  // Dummy number of tickets
+        fallbackBookingDto.setPrice(456789);
+        fallbackBookingDto.setNumberOfTickets(2);
 
-        return new ResponseEntity<>(fallbackBookingDto, HttpStatus.BAD_REQUEST);  // Return the dummy data
+        return new ResponseEntity<>(fallbackBookingDto, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{bookingId}")
@@ -78,6 +78,7 @@ public class BookingController {
 
 
     @DeleteMapping("/{bookingId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NORMAL')")
     public ResponseEntity<ApiResponseDto> deleteBooking(@PathVariable String bookingId) {
         bookingService.deleteBooking(bookingId);
         ApiResponseDto responseDto = new ApiResponseDto();
