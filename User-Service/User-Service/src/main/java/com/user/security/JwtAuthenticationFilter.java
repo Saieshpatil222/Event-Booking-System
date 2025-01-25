@@ -55,9 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userName.equals(userDetails.getUsername()) && !jwtHelper.isTokenExpired(token)) {
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));//It enriches the authentication object with information like
-                // the IP address and session ID from the request, which can be useful for auditing or security checks.
-
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
