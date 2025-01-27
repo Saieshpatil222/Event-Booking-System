@@ -51,6 +51,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
 
     public static class Config {
-
+        //For storing configuration data (e.g., flags or settings).
     }
 }

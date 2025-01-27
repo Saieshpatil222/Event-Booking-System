@@ -16,10 +16,7 @@ public class GlobalExceptionHandler {
         Logger logger = (Logger) LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
         logger.info("Exception Handler invoked!!");
-        ApiResponseDto responseDto = new ApiResponseDto();
-        responseDto.setSuccess(true);
-        responseDto.setStatus(HttpStatus.NOT_FOUND);
-        responseDto.setMessage("Event Not Found");
+        ApiResponseDto responseDto = ApiResponseDto.builder().success(true).status(HttpStatus.NOT_FOUND).message("Event Not Found").build();
         return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
 }

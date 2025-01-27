@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.listeners.MockitoListener;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -29,7 +32,6 @@ class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
-
 
     @Mock
     private ModelMapper modelMapper;
@@ -49,8 +51,8 @@ class UserServiceImplTest {
         Mockito.when(userRepository.save(any(User.class))).thenReturn(savedUser);
         Mockito.when(modelMapper.map(any(User.class), any(Class.class))).thenReturn(userDto);
 
-        UserDto user1 = userService.createUser(userDto);
-        Assertions.assertNotNull(user1);
+        UserDto createdUser = userService.createUser(userDto);
+        Assertions.assertNotNull(createdUser);
     }
 
     @Test
@@ -58,7 +60,6 @@ class UserServiceImplTest {
     void createUserTestNegativeScenario() {
         UserDto userDto = UserDto.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
         User user = User.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
-
         Mockito.when(modelMapper.map(any(UserDto.class), any(Class.class))).thenReturn(user);
         Mockito.when(passwordEncoder.encode(any(String.class))).thenReturn("encodedPassword");
         Mockito.when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("Database error"));
@@ -69,9 +70,9 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getSingleuserTest() {
+    @WithMockUser("ROLE_ADMIN")
+    void getSingleUserTest() {
         String userId = "123";
-
         UserDto userDto = UserDto.builder().password("abc123").userName("Abc").userId("123").mobileNumber(12334443).build();
         User user = User.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
 
@@ -80,10 +81,10 @@ class UserServiceImplTest {
 
         UserDto singleUser = this.userService.getSingleUser(userId);
         Assertions.assertNotNull(singleUser);
-
     }
 
     @Test
+    @WithMockUser("ROLE_ADMIN")
     void getAllUsersTest() {
         User user1 = User.builder().userName("abc").password("abc123").mobileNumber(1223333).emailId("abc@gmail.com").build();
         User user2 = User.builder().userName("xyz").password("xyz123").mobileNumber(19128829).emailId("xyz@gmail.com").build();
@@ -104,8 +105,31 @@ class UserServiceImplTest {
         List<UserDto> allUsers = userService.getAllUsers();
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(userDtoList.size(), allUsers.size());
-
     }
 
+    @Test
+    public void deleteUser() {
+        String userId = "123";
+        UserDto userDto = UserDto.builder().password("abc123").userName("Abc").userId("123").mobileNumber(12334443).build();
+        User user = User.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
+
+        Mockito.when(userRepository.findById(anyString())).thenReturn(Optional.of(user));
+        this.userService.deleteUser(userId);
+        verify(userRepository, times(1)).delete(user);
+    }
+
+    @Test
+    public void updateUser() {
+        String userId = "123";
+        UserDto userDto = UserDto.builder().password("abc123").userName("Abc").userId("123").mobileNumber(12334443).build();
+        User user = User.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
+
+        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(modelMapper.map(user, UserDto.class)).thenReturn(userDto);
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        UserDto savedUserDto = userService.updateUser(userDto, userId);
+        Assertions.assertNotNull(savedUserDto);
+    }
 
 }

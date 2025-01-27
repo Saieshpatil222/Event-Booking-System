@@ -1,17 +1,12 @@
 package com.booking.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+import java.awt.print.Book;
+
+@Builder
 @Document
 public class Booking {
 
@@ -33,6 +28,10 @@ public class Booking {
     private String promoCode;
 
     private String address;
+
+    public Booking() {
+
+    }
 
     public String getAddress() {
         return address;
@@ -81,7 +80,6 @@ public class Booking {
     public void setNumberOfTickets(int numberOfTickets) {
         this.numberOfTickets = numberOfTickets;
     }
-
 
 
     public String getStatus() {

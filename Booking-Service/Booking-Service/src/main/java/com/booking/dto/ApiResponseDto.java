@@ -1,16 +1,14 @@
 package com.booking.dto;
 
-import lombok.*;
+import lombok.Builder;
 import org.springframework.http.HttpStatus;
 
 @Builder
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class ApiResponseDto {
 
     private String message;
+    private HttpStatus status;
+    private boolean success;
 
     public HttpStatus getStatus() {
         return status;
@@ -28,9 +26,6 @@ public class ApiResponseDto {
         this.success = success;
     }
 
-    private HttpStatus status;
-
-    private boolean success;
 
     public String getMessage() {
         return message;

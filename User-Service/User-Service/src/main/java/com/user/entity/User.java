@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,6 +29,50 @@ public class User implements UserDetails {
     private String password;
 
     private List<String> roles;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public long getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(long mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,4 +115,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

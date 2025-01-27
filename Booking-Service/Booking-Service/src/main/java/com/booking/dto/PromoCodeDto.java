@@ -2,16 +2,16 @@ package com.booking.dto;
 
 import lombok.*;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class PromoCodeDto {
 
     private String promoCodeId;
 
     private String promoCode;
+
+    public PromoCodeDto() {
+
+    }
 
     public String getPromoCodeId() {
         return promoCodeId;

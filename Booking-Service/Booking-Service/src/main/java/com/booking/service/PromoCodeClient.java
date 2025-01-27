@@ -11,6 +11,6 @@ import com.booking.dto.PromoCodeDto;
 public interface PromoCodeClient {
 
     @GetMapping("/promocode/{promoCode}")
-    public PromoCodeDto getPromoCode(@PathVariable String promoCode);
+    public PromoCodeDto getPromoCodeById(@PathVariable String promoCode);
 
 }

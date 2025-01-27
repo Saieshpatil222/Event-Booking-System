@@ -4,10 +4,6 @@ import lombok.*;
 
 import java.util.Date;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class EventDto {
 
@@ -23,6 +19,9 @@ public class EventDto {
 
     private String address;
 
+    public EventDto() {
+
+    }
 
     public String getEventId() {
         return eventId;
@@ -71,7 +70,6 @@ public class EventDto {
     public void setAddress(String address) {
         this.address = address;
     }
-
 
 
 }

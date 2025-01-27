@@ -58,7 +58,7 @@ public class BookingServiceImpl implements BookingService {
 
         logger.info("Event : {} ", eventDto);
 
-        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCode(promoCodeId);
+        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCodeById(promoCodeId);
 
         booking.setPromoCode(promoCodeDto.getPromoCode());
 

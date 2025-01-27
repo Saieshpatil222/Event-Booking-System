@@ -41,8 +41,8 @@ public class PromoCodeController {
 
 	@DeleteMapping("/{promoCode}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<ApiResponseDto> deletePromoCode(@PathVariable String promoCode) {
-		promoCodeService.deletePromoCode(promoCode);
+	public ResponseEntity<ApiResponseDto> deletePromoCode(@PathVariable String promoCodeId) {
+		promoCodeService.deletePromoCode(promoCodeId);
 		ApiResponseDto apiResponseDto = ApiResponseDto.builder().message("PromoCode Deleted Successfully")
 				.status(HttpStatus.OK).success(true).build();
 		return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);

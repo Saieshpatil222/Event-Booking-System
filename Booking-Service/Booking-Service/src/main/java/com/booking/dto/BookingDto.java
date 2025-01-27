@@ -3,11 +3,16 @@ package com.booking.dto;
 
 import lombok.Builder;
 
+@Builder
 public class BookingDto {
 
     private String bookingId;
 
     private String userId;
+
+    public BookingDto() {
+
+    }
 
 //    public BookingDto(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode) {
 //        this.bookingId = bookingId;

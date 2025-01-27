@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getSingleUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId =" + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
         UserDto dto = modelMapper.map(user, UserDto.class);
         return dto;
     }
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId=" + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
         user.setUserName(userDto.getUserName());
         user.setEmailId(userDto.getEmailId());
         user.setMobileNumber(userDto.getMobileNumber());
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId=" + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
         userRepository.delete(user);
     }
 }

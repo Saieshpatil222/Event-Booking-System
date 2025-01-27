@@ -1,6 +1,7 @@
 package com.booking.projectconfig;
 
 import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,4 +26,5 @@ public class FeignClientConfig {
             }
         };
     }
+
 }

@@ -39,15 +39,15 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     }
 
     @Override
-    public void deletePromoCode(String promoCode) {
-        PromoCode code = promoCodeRepository.findById(promoCode)
+    public void deletePromoCode(String promoCodeId) {
+        PromoCode code = promoCodeRepository.findById(promoCodeId)
                 .orElseThrow(() -> new ResourceNotFoundException("PromoCode Not Found"));
         promoCodeRepository.delete(code);
     }
 
     @Override
-    public PromoCodeDto getPromoCode(String promoCode) {
-        PromoCode promoCode1 = promoCodeRepository.findByPromoCodeId(promoCode);//.orElseThrow(() -> new ResourceNotFoundException("PromoCode Not Found " + promoCodeId));
+    public PromoCodeDto getPromoCode(String promoCodeId) {
+        PromoCode promoCode1 = promoCodeRepository.findById(promoCodeId).orElseThrow(() -> new ResourceNotFoundException("PromoCode Not Found " + promoCodeId));
         //promoCode1.setPromocodeId(promoCode1.getPromocodeId());
         return modelMapper.map(promoCode1, PromoCodeDto.class);
     }

@@ -10,8 +10,8 @@ public interface PromoCodeService {
 
     List<PromoCodeDto> getAllPromoCodes();
 
-    void deletePromoCode(String promoCode);
+    void deletePromoCode(String promoCodeId);
 
-    PromoCodeDto getPromoCode(String promoCode);
+    PromoCodeDto getPromoCode(String promoCodeId);
 
 }
