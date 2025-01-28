@@ -125,8 +125,8 @@ class UserServiceImplTest {
         User user = User.builder().userName("abc").mobileNumber(918182892).password("abc123").build();
 
         Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
-        Mockito.when(modelMapper.map(user, UserDto.class)).thenReturn(userDto);
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+        Mockito.when(modelMapper.map(user, UserDto.class)).thenReturn(userDto);
 
         UserDto savedUserDto = userService.updateUser(userDto, userId);
         Assertions.assertNotNull(savedUserDto);
