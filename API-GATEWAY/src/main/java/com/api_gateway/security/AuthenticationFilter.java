@@ -33,7 +33,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-                //The above line is used to extract the Authorization header from the incoming request.
 
                 if (authHeader != null && authHeader.startsWith("Bearer")) {
                     authHeader = authHeader.substring(7);
@@ -51,6 +50,5 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
 
     public static class Config {
-        //For storing configuration data (e.g., flags or settings).
     }
 }

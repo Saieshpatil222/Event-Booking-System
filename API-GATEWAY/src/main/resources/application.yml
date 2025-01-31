@@ -22,13 +22,14 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user/** , /auth/login
-#            - Path=
+        #            - Path=
         - id: PROJECT-FOR-PROMOCODE
           uri: lb://PROJECT-FOR-PROMOCODE
           predicates:
             - Path=/promocode/**
           filters:
             - AuthenticationFilter
+
 
 server:
   port: 9091

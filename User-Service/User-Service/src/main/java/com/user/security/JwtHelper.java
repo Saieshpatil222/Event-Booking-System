@@ -1,6 +1,7 @@
 package com.user.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -14,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import static java.security.KeyRep.Type.SECRET;
 
 @Component
 public class JwtHelper {
@@ -79,20 +78,25 @@ public class JwtHelper {
     //generate token for user
     public String generateToken(UserDetails userDetails, List<String> roles) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles",roles);
-        return doGenerateToken(claims, userDetails.getUsername());
+        claims.put("roles", roles);
+        return doGenerateToken(claims, userDetails.getUsername());  // Now returning a string
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-
-        return
-                Jwts.builder()
-                        .setClaims(claims).
-                        setSubject(subject).
-                        setIssuedAt(new Date(System.currentTimeMillis()))
-                        .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
-                        .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALIDITY))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact();  //  This generates the final JWT string
     }
+
 
 
 

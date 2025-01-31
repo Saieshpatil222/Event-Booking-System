@@ -30,7 +30,6 @@ public class UserController {
         return new ResponseEntity<>(userDto1, HttpStatus.OK);
     }
 
-
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getSingleUser(@PathVariable String userId) {
