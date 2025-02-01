@@ -1,31 +1,40 @@
 package com.booking.dto;
 
-
-import lombok.Builder;
-
-@Builder
 public class BookingDto {
 
     private String bookingId;
 
     private String userId;
 
+    private String address;
+
+    private String eventName;
+
+    private int numberOfTickets;
+
+    private int price;
+
+    private String status;
+
+    private String eventId;
+
+    private String promoCode;
+
     public BookingDto() {
 
     }
 
-//    public BookingDto(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode) {
-//        this.bookingId = bookingId;
-//        this.userId = userId;
-//        this.eventId = eventId;
-//        this.eventName = eventName;
-//        this.numberOfTickets = numberOfTickets;
-//        this.price = price;
-//        this.status = status;
-//        this.promoCode = promoCode;
-//    }
-
-    private String eventId;
+    public BookingDto(String bookingId, String userId, String eventId, String address, String eventName, int numberOfTickets, int price, String status, String promoCode) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.eventId = eventId;
+        this.address = address;
+        this.eventName = eventName;
+        this.numberOfTickets = numberOfTickets;
+        this.price = price;
+        this.status = status;
+        this.promoCode = promoCode;
+    }
 
     public String getAddress() {
         return address;
@@ -35,10 +44,6 @@ public class BookingDto {
         this.address = address;
     }
 
-    private String address;
-
-    private String eventName;
-
     public String getPromoCode() {
         return promoCode;
     }
@@ -46,16 +51,6 @@ public class BookingDto {
     public void setPromoCode(String promoCode) {
         this.promoCode = promoCode;
     }
-
-    private int numberOfTickets;
-
-    private int price;
-
-    private String status;
-
-
-    private String promoCode;
-
 
     public String getStatus() {
         return status;

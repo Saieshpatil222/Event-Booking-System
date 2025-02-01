@@ -23,6 +23,15 @@ public class EventDto {
 
     }
 
+    public EventDto(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String address) {
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.eventPrice = eventPrice;
+        this.eventSchedule = eventSchedule;
+        this.seats = seats;
+        this.address = address;
+    }
+
     public String getEventId() {
         return eventId;
     }

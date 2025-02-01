@@ -33,6 +33,18 @@ public class Booking {
 
     }
 
+    public Booking(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode, String address) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.numberOfTickets = numberOfTickets;
+        this.price = price;
+        this.status = status;
+        this.promoCode = promoCode;
+        this.address = address;
+    }
+
     public String getAddress() {
         return address;
     }

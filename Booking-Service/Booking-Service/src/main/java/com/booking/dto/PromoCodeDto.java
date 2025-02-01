@@ -9,8 +9,16 @@ public class PromoCodeDto {
 
     private String promoCode;
 
+    private int discount;
+
     public PromoCodeDto() {
 
+    }
+
+    public PromoCodeDto(String promoCodeId, String promoCode, int discount) {
+        this.promoCodeId = promoCodeId;
+        this.promoCode = promoCode;
+        this.discount = discount;
     }
 
     public String getPromoCodeId() {
@@ -37,6 +45,5 @@ public class PromoCodeDto {
         this.discount = discount;
     }
 
-    private int discount;
 
 }
