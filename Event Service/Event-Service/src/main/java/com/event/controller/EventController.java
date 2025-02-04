@@ -33,7 +33,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    @PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<EventDto> getEventById(@PathVariable String eventId) {
         EventDto eventDto = eventService.getSingleEvent(eventId);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
@@ -41,14 +41,14 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponseDto> DeleteEvent(@PathVariable String eventId) {
+    public ResponseEntity<ApiResponseDto> deleteEvent(@PathVariable("eventId") String eventId) {
         eventService.deleteEvent(eventId);
         ApiResponseDto apiResponseDto = ApiResponseDto.builder().message("Event Deleted Successfully").status(HttpStatus.OK).success(true).build();
         return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
     }
 
     @PutMapping("/{eventId}")
-    @PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<EventDto> updateEvent(@PathVariable String eventId, @RequestBody EventDto eventDto) {
         EventDto eventDto1 = eventService.updateEvent(eventId, eventDto);
         return new ResponseEntity<>(eventDto1, HttpStatus.OK);

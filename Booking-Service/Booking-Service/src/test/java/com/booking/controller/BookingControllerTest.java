@@ -120,7 +120,7 @@ public class BookingControllerTest {
 
         mockMvc.perform(get("/booking/{bookingId}", bookingId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .with(user("admin").roles("ADMIN"))
+                        .with(user("normal").roles("NORMAL"))
                         .content(objectMapper.writeValueAsString(bookingDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(bookingDto.getUserId()))

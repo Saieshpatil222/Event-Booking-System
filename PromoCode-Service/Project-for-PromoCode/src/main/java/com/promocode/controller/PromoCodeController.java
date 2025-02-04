@@ -21,6 +21,7 @@ public class PromoCodeController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PromoCodeDto> createPromoCode(@RequestBody PromoCodeDto promoCodeDto) {
+        System.out.println("Received request to create promo code: " + promoCodeDto.getPromoCode());
         PromoCodeDto promoCodeDto1 = promoCodeService.createPromoCode(promoCodeDto);
         return new ResponseEntity<>(promoCodeDto1, HttpStatus.CREATED);
     }
@@ -29,7 +30,7 @@ public class PromoCodeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PromoCodeDto>> getAllPromoCodes() {
         List<PromoCodeDto> promoCode = promoCodeService.getAllPromoCodes();
-        return new ResponseEntity<>(promoCode, HttpStatus.FOUND);
+        return new ResponseEntity<>(promoCode, HttpStatus.OK);
     }
 
     @GetMapping("/{promoCode}")

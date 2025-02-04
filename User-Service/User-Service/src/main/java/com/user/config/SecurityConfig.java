@@ -40,14 +40,12 @@ public class SecurityConfig {
         daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 
-
         return daoAuthenticationProvider;
     }
 
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
@@ -66,8 +64,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 
 
     @Bean

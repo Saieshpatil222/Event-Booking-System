@@ -23,9 +23,9 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.POST, "/event").hasRole("ADMIN")// General access
-                            .requestMatchers(HttpMethod.GET, "/event/**").hasAnyAuthority("ROLE_ADMIN","ROLE_NORMAL")
+                            .requestMatchers(HttpMethod.GET, "/event/**").hasAnyAuthority("ROLE_ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/event/**").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.PUT, "/event/**").hasAnyAuthority("ROLE_ADMIN","ROLE_NORMAL")
+                            .requestMatchers(HttpMethod.PUT, "/event/**").hasAnyAuthority("ROLE_ADMIN")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session
