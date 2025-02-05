@@ -53,8 +53,8 @@ public class EventControllerTest {
 
     @Test
     public void createEventTest() throws Exception {
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).address("XYZ").eventSchedule(date).build();
-        EventDto savedEvent = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).address("XYZ").eventSchedule(date).build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).venue("XYZ").eventSchedule(date).build();
+        EventDto savedEvent = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).venue("XYZ").eventSchedule(date).build();
 
         Mockito.when(eventService.createEvent(any(EventDto.class))).thenReturn(savedEvent);
 
@@ -73,7 +73,7 @@ public class EventControllerTest {
     @Test
     public void getEventTest() throws Exception {
         String eventId = "event123";
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).address("XYZ").eventSchedule(date).build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).venue("XYZ").eventSchedule(date).build();
 
         Mockito.when(eventService.getSingleEvent(eventId)).thenReturn(eventDto);
         mockMvc.perform(get("/event/{eventId}", eventId)
@@ -90,9 +90,9 @@ public class EventControllerTest {
 
     @Test
     public void getAllEventsTest() throws Exception {
-        EventDto eventDto1 = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).address("XYZ").eventSchedule(date).build();
-        EventDto eventDto2 = EventDto.builder().eventName("XYZ").eventPrice(300).seats(3).address("ABC").eventSchedule(date).build();
-        EventDto eventDto3 = EventDto.builder().eventName("MNC").eventPrice(400).seats(4).address("FDS").eventSchedule(date).build();
+        EventDto eventDto1 = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).venue("XYZ").eventSchedule(date).build();
+        EventDto eventDto2 = EventDto.builder().eventName("XYZ").eventPrice(300).seats(3).venue("ABC").eventSchedule(date).build();
+        EventDto eventDto3 = EventDto.builder().eventName("MNC").eventPrice(400).seats(4).venue("FDS").eventSchedule(date).build();
 
         List<EventDto> eventDtoList = Arrays.asList(eventDto1, eventDto2, eventDto3);
 
@@ -112,13 +112,13 @@ public class EventControllerTest {
 
         Mockito.verify(eventService, times(1)).getAllEvents();
     }
-    
+
 
     @Test
     public void updateUserTest() throws Exception {
         String eventId = "event123";
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).address("XYZ").eventSchedule(date).build();
-        EventDto updatedEvent = EventDto.builder().eventName("ABC").eventPrice(2000).seats(4).address("XYZA").eventSchedule(date).build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(200).seats(2).venue("XYZ").eventSchedule(date).build();
+        EventDto updatedEvent = EventDto.builder().eventName("ABC").eventPrice(2000).seats(4).venue("XYZA").eventSchedule(date).build();
 
         Mockito.when(eventService.updateEvent(eq(eventId), any(EventDto.class))).thenReturn(updatedEvent);
 

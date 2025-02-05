@@ -27,13 +27,13 @@ public class Booking {
 
     private String promoCode;
 
-    private String address;
+    private String venue;
 
     public Booking() {
 
     }
 
-    public Booking(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode, String address) {
+    public Booking(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode, String venue) {
         this.bookingId = bookingId;
         this.userId = userId;
         this.eventId = eventId;
@@ -42,15 +42,15 @@ public class Booking {
         this.price = price;
         this.status = status;
         this.promoCode = promoCode;
-        this.address = address;
+        this.venue = venue;
     }
 
-    public String getAddress() {
-        return address;
+    public String getVenue() {
+        return venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVenue(String address) {
+        this.venue = address;
     }
 
     public String getBookingId() {

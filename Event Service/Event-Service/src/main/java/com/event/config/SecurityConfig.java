@@ -26,6 +26,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.GET, "/event/**").hasAnyAuthority("ROLE_ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/event/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/event/**").hasAnyAuthority("ROLE_ADMIN")
+                            .requestMatchers(HttpMethod.POST, "/event/upload-image/**").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/event/image/**").hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session

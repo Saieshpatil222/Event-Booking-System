@@ -13,7 +13,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.test.context.support.WithMockUser;
+
 import java.util.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -36,9 +38,9 @@ public class EventServiceTest {
     @Test
     @WithMockUser("ROLE_ADMIN")
     public void createEvent() {
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").eventId("123").build();
-        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").eventId("123").build();
-        Event saved = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").eventId("123").build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").eventId("123").build();
+        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").eventId("123").build();
+        Event saved = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").eventId("123").build();
         Mockito.when(modelMapper.map(any(EventDto.class), any(Class.class))).thenReturn(saved);
         Mockito.when(eventRepository.save(Mockito.any())).thenReturn(saved);
         Mockito.when(modelMapper.map(any(Event.class), any(Class.class))).thenReturn(eventDto);
@@ -49,8 +51,8 @@ public class EventServiceTest {
     @Test
     @WithMockUser("ROLE_ADMIN")
     public void getEvent() {
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
-        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
+        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
         String eventId = "122334";
         Mockito.when(eventRepository.findById(Mockito.anyString())).thenReturn(Optional.of(event));
         Mockito.when(modelMapper.map(any(Event.class), any(Class.class))).thenReturn(eventDto);
@@ -61,13 +63,13 @@ public class EventServiceTest {
     @Test
     @WithMockUser("ROLE_ADMIN")
     public void getAllEvents() {
-        Event event1 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
-        Event event2 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
-        Event event3 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
+        Event event1 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
+        Event event2 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
+        Event event3 = Event.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
 
-        EventDto eventDto1 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
-        EventDto eventDto2 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
-        EventDto eventDto3 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).address("sdfgh").seats(88).build();
+        EventDto eventDto1 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
+        EventDto eventDto2 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
+        EventDto eventDto3 = EventDto.builder().eventName("fghj").eventSchedule(eventDate).eventPrice(78).venue("sdfgh").seats(88).build();
 
         List<Event> eventsList = Arrays.asList(event1, event2, event3);
         List<EventDto> eventDtosList = Arrays.asList(eventDto1, eventDto2, eventDto3);
@@ -84,8 +86,8 @@ public class EventServiceTest {
     @Test
     @WithMockUser("ROLE_ADMIN")
     public void deleteEvent() {
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
-        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
+        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
         String eventId = "122334";
 
         Mockito.when(eventRepository.findById(Mockito.anyString())).thenReturn(Optional.of(event));
@@ -97,8 +99,8 @@ public class EventServiceTest {
     @WithMockUser("ROLE_ADMIN")
     public void updateEventTest() {
         String eventId = "Chsj";
-        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
-        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).address("xyz").build();
+        EventDto eventDto = EventDto.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
+        Event event = Event.builder().eventName("ABC").eventPrice(1234).eventSchedule(eventDate).venue("xyz").build();
 
         Mockito.when(eventRepository.findById(Mockito.anyString())).thenReturn(Optional.of(event));
         Mockito.when(modelMapper.map(event, EventDto.class)).thenReturn(eventDto);

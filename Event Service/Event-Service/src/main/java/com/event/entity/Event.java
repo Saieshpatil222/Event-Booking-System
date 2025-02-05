@@ -21,19 +21,41 @@ public class Event {
 
     private int seats;
 
-    private String address;
+    private String venue;
+
+    private byte[] eventImage;
+
+    private String eventImageType;
 
     public Event() {
 
     }
 
-    public Event(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String address) {
+    public Event(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String venue, byte[] eventImage, String eventImageType) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventPrice = eventPrice;
         this.eventSchedule = eventSchedule;
         this.seats = seats;
-        this.address = address;
+        this.venue = venue;
+        this.eventImage = eventImage;
+        this.eventImageType = eventImageType;
+    }
+
+    public String getEventImageType() {
+        return eventImageType;
+    }
+
+    public void setEventImageType(String eventImageType) {
+        this.eventImageType = eventImageType;
+    }
+
+    public byte[] getEventImage() {
+        return eventImage;
+    }
+
+    public void setEventImage(byte[] eventImage) {
+        this.eventImage = eventImage;
     }
 
     public String getEventId() {
@@ -76,13 +98,11 @@ public class Event {
         this.seats = seats;
     }
 
-    public String getAddress() {
-        return address;
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public String getVenue() {
+        return venue;
     }
-
-
 }

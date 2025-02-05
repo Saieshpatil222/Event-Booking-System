@@ -84,7 +84,7 @@ public class BookingServiceImpl implements BookingService {
             booking.setPrice(updatedPrice);
         }
         booking.setStatus(bookingDto.getStatus());
-        booking.setAddress(eventDto.getAddress());
+        booking.setVenue(eventDto.getVenue());
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);
     }
@@ -119,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
 
         }
         booking.setStatus(bookingDto.getStatus());
-        booking.setAddress(eventDto.getAddress());
+        booking.setVenue(eventDto.getVenue());
         booking.setPromoCode("");
         Booking booking1 = bookingRepository.save(booking);
         return modelMapper.map(booking1, BookingDto.class);

@@ -6,7 +6,7 @@ public class BookingDto {
 
     private String userId;
 
-    private String address;
+    private String venue;
 
     private String eventName;
 
@@ -24,24 +24,24 @@ public class BookingDto {
 
     }
 
-    public BookingDto(String bookingId, String userId, String eventId, String address, String eventName, int numberOfTickets, int price, String status, String promoCode) {
+    public BookingDto(String bookingId, String userId, String venue, String eventName, int numberOfTickets, int price, String status, String eventId, String promoCode) {
         this.bookingId = bookingId;
         this.userId = userId;
-        this.eventId = eventId;
-        this.address = address;
+        this.venue = venue;
         this.eventName = eventName;
         this.numberOfTickets = numberOfTickets;
         this.price = price;
         this.status = status;
+        this.eventId = eventId;
         this.promoCode = promoCode;
     }
 
-    public String getAddress() {
-        return address;
+    public String getVenue() {
+        return venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 
     public String getPromoCode() {

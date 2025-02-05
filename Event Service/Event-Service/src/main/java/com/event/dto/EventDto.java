@@ -1,6 +1,7 @@
 package com.event.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -18,19 +19,41 @@ public class EventDto {
 
     private int seats;
 
-    private String address;
+    private String venue;
+
+    private byte[] eventImage;
+
+    private String eventImageType;
 
     public EventDto() {
 
     }
 
-    public EventDto(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String address) {
+    public EventDto(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String venue, byte[] eventImage, String eventImageType) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventPrice = eventPrice;
         this.eventSchedule = eventSchedule;
         this.seats = seats;
-        this.address = address;
+        this.venue = venue;
+        this.eventImage = eventImage;
+        this.eventImageType = eventImageType;
+    }
+
+    public byte[] getEventImage() {
+        return eventImage;
+    }
+
+    public void setEventImage(byte[] eventImage) {
+        this.eventImage = eventImage;
+    }
+
+    public String getEventImageType() {
+        return eventImageType;
+    }
+
+    public void setEventImageType(String eventImageType) {
+        this.eventImageType = eventImageType;
     }
 
     public String getEventId() {
@@ -73,11 +96,11 @@ public class EventDto {
         this.seats = seats;
     }
 
-    public String getAddress() {
-        return address;
+    public String getVenue() {
+        return venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVenue(String venue) {
+        this.venue = venue;
     }
 }

@@ -17,19 +17,19 @@ public class EventDto {
 
     private int seats;
 
-    private String address;
+    private String venue;
 
     public EventDto() {
 
     }
 
-    public EventDto(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String address) {
+    public EventDto(String eventId, String eventName, int eventPrice, Date eventSchedule, int seats, String venue) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventPrice = eventPrice;
         this.eventSchedule = eventSchedule;
         this.seats = seats;
-        this.address = address;
+        this.venue = venue;
     }
 
     public String getEventId() {
@@ -72,12 +72,12 @@ public class EventDto {
         this.seats = seats;
     }
 
-    public String getAddress() {
-        return address;
+    public String getVenue() {
+        return venue;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVenue(String address) {
+        this.venue = address;
     }
 
 
