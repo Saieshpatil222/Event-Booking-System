@@ -54,8 +54,9 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/auth/login").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/user").permitAll() // General access
-                            .requestMatchers(HttpMethod.POST, "/user/**").hasRole("ADMIN") // Admin-only access
+                            .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/user/internal/**").authenticated()
+                            .requestMatchers(HttpMethod.PUT, "/user/**").hasRole("ADMIN") // Admin-only access
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session

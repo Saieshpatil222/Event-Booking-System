@@ -26,14 +26,11 @@ public class BookingController {
     @PostMapping("/{userId}/{eventId}/{promoCodeId}")
     @CircuitBreaker(name = "eventPromoCodeBreaker", fallbackMethod = "eventPromoCodeFallback")
     @Retry(name = "eventPromoCodeRetry", fallbackMethod = "eventPromoCodeFallback")
-    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
-                                                    @PathVariable String eventId, @PathVariable("promoCodeId") String promoCode) {
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId, @PathVariable String eventId, @PathVariable("promoCodeId") String promoCode) {
         Logger logger = LoggerFactory.getLogger(BookingController.class);
-        logger.info(
-                "Booking Dto: {} ", bookingDto
-        );
-        BookingDto bookingDto1 = bookingService.createBooking(bookingDto, eventId, userId, promoCode);
-        return new ResponseEntity<>(bookingDto1, HttpStatus.OK);
+        logger.info("Booking Dto: {} ", bookingDto);
+        BookingDto savedBooking = bookingService.createBooking(bookingDto, eventId, userId, promoCode);
+        return new ResponseEntity<>(savedBooking, HttpStatus.OK);
     }
 
 
@@ -69,8 +66,7 @@ public class BookingController {
     }
 
     @PostMapping("/{userId}/{eventId}")
-    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId,
-                                                    @PathVariable String eventId) {
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingDto bookingDto, @PathVariable String userId, @PathVariable String eventId) {
 
         BookingDto bookingDto1 = bookingService.createBookingWithoutPromoCode(bookingDto, eventId, userId);
         return new ResponseEntity<>(bookingDto1, HttpStatus.OK);

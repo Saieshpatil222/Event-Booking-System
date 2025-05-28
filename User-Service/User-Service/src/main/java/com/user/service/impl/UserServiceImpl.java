@@ -32,17 +32,16 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDto, User.class);
         user.setUserId(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(List.of("ROLE_NORMAL"));
-        User user1 = userRepository.save(user);
-        return modelMapper.map(user1, UserDto.class);
+        user.setRoles(List.of("ROLE_ADMIN"));
+        User savedUser = userRepository.save(user);
+        return modelMapper.map(savedUser, UserDto.class);
 
     }
 
     @Override
     public UserDto getSingleUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
-        UserDto dto = modelMapper.map(user, UserDto.class);
-        return dto;
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
@@ -58,8 +57,7 @@ public class UserServiceImpl implements UserService {
         user.setEmailId(userDto.getEmailId());
         user.setMobileNumber(userDto.getMobileNumber());
         userRepository.save(user);
-        UserDto userDto1 = modelMapper.map(user, UserDto.class);
-        return userDto1;
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override

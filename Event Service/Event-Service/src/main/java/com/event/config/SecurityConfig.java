@@ -22,10 +22,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers(HttpMethod.POST, "/event").hasRole("ADMIN")// General access
-                            .requestMatchers(HttpMethod.GET, "/event/**").hasAnyAuthority("ROLE_ADMIN")
+                    request.requestMatchers(HttpMethod.GET, "/event/internal/**").authenticated()
+                            .requestMatchers(HttpMethod.PUT, "/event/internal/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/event").hasRole("ADMIN")// General access
+                            .requestMatchers(HttpMethod.GET, "/event/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/event/**").hasRole("ADMIN")
-                            .requestMatchers(HttpMethod.PUT, "/event/**").hasAnyAuthority("ROLE_ADMIN")
+                            .requestMatchers(HttpMethod.PUT, "/event/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.POST, "/event/upload-image/**").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.GET, "/event/image/**").hasRole("ADMIN")
                             .anyRequest().authenticated();

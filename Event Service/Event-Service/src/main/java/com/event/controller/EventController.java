@@ -36,7 +36,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EventDto> getEventById(@PathVariable String eventId) {
         EventDto eventDto = eventService.getSingleEvent(eventId);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
@@ -51,10 +51,24 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EventDto> updateEvent(@PathVariable String eventId, @RequestBody EventDto eventDto) {
         EventDto eventDto1 = eventService.updateEvent(eventId, eventDto);
         return new ResponseEntity<>(eventDto1, HttpStatus.OK);
+    }
+
+    @PutMapping("/internal/{eventId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<EventDto> updateEventForBooking(@PathVariable String eventId, @RequestBody EventDto eventDto) {
+        EventDto eventDto1 = eventService.updateEvent(eventId, eventDto);
+        return new ResponseEntity<>(eventDto1, HttpStatus.OK);
+    }
+
+    @GetMapping("/internal/{eventId}")
+    @PreAuthorize("isAuthenticated()") // or just isAuthenticated()
+    public ResponseEntity<EventDto> getEventForBooking(@PathVariable String eventId) {
+        EventDto eventDto = eventService.getSingleEvent(eventId);
+        return ResponseEntity.ok(eventDto);
     }
 
     @PostMapping("/upload-image/{eventId}")
@@ -63,7 +77,6 @@ public class EventController {
         EventDto eventDto = eventService.uploadImage(eventId, multipartFile);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
-
 
     @GetMapping("/image/{eventId}")
     @PreAuthorize("hasRole('ADMIN')")

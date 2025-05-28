@@ -1,22 +1,17 @@
 package com.booking.service.impl;
 
-import com.booking.dto.BookingDto;
-import com.booking.dto.EventDto;
-import com.booking.dto.PromoCodeDto;
+import com.booking.dto.*;
 import com.booking.entity.Booking;
 import com.booking.exception.BookingNotFoundException;
 import com.booking.exception.IncorrectAmountException;
 import com.booking.exception.InsufficientSeatsException;
 import com.booking.repository.BookingRepository;
-import com.booking.service.ApiClient;
-import com.booking.service.BookingService;
-import com.booking.service.PromoCodeClient;
+import com.booking.service.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class BookingServiceImpl implements BookingService {
 
+    Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+
     @Autowired
     private BookingRepository bookingRepository;
 
@@ -33,13 +30,16 @@ public class BookingServiceImpl implements BookingService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ApiClient apiClient;
+    private EventClient eventClient;
 
     @Autowired
     private PromoCodeClient promoCodeClient;
 
     @Autowired
-    private WebClient webClient;
+    private UserClient userClient;
+
+    @Autowired
+    private NotificationClient notificationClient;
 
     @Override
     public BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCodeId) {
@@ -54,11 +54,11 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingId(UUID.randomUUID().toString());
 
-        EventDto eventDto = apiClient.getEventById(eventId);
+        EventDto eventDto = eventClient.getEventForBooking(eventId);
 
         logger.info("Event : {} ", eventDto);
 
-        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCodeById(promoCodeId);
+        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCodeForBooking(promoCodeId);
 
         booking.setPromoCode(promoCodeDto.getPromoCode());
 
@@ -69,11 +69,11 @@ public class BookingServiceImpl implements BookingService {
                 throw new InsufficientSeatsException("Seat Number Exceeded");
             } else {
                 eventDto.setSeats(eventDto.getSeats() - booking.getNumberOfTickets());
-                apiClient.updateEvent(eventDto, eventDto.getEventId());
+                eventClient.updateEventForBooking(eventDto, eventDto.getEventId());
             }
 
             if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
-                throw new IncorrectAmountException("Please enter the correct amount.");
+                throw new IncorrectAmountException("Please Enter the Correct Amount.");
             }
 
         }
@@ -85,14 +85,36 @@ public class BookingServiceImpl implements BookingService {
         }
         booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
-        Booking booking1 = bookingRepository.save(booking);
-        return modelMapper.map(booking1, BookingDto.class);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        UserDto userDto = userClient.getSingleUserForBooking(userId);
+
+        logger.info("USER:{}", userDto);
+
+        sendBookingNotification(savedBooking, eventDto, userDto);
+
+        return modelMapper.map(savedBooking, BookingDto.class);
     }
+
+
+    private void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
+        BookingNotificationDto notificationDto = new BookingNotificationDto();
+        logger.info("Sending booking notification in thread: {}", Thread.currentThread().getName());
+
+        notificationDto.setEventName(eventDto.getEventName());
+        notificationDto.setEmail(userDto.getEmailId());
+        notificationDto.setNumberOfTickets(booking.getNumberOfTickets());
+        notificationDto.setPrice(booking.getPrice());
+        notificationDto.setUserName(userDto.getUserName());
+        notificationDto.setStatus(booking.getStatus());
+        notificationDto.setVenue(booking.getVenue());
+
+        notificationClient.sendBookingNotification(notificationDto);
+    }
+
 
     @Override
     public BookingDto createBookingWithoutPromoCode(BookingDto bookingDto, String eventId, String userId) {
-
-        Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
 
         Booking booking = modelMapper.map(bookingDto, Booking.class);
 
@@ -102,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingId(UUID.randomUUID().toString());
 
-        EventDto eventDto = apiClient.getEventById(eventId);
+        EventDto eventDto = eventClient.getEventForBooking(eventId);
         logger.info("Event : {} ", eventDto);
 
         if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
@@ -110,7 +132,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new InsufficientSeatsException("Seat Number Exceeded");
             } else {
                 eventDto.setSeats(eventDto.getSeats() - booking.getNumberOfTickets());
-                apiClient.updateEvent(eventDto, eventDto.getEventId());
+                eventClient.updateEventForBooking(eventDto, eventDto.getEventId());
             }
 
             if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
@@ -121,8 +143,13 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
         booking.setPromoCode("");
-        Booking booking1 = bookingRepository.save(booking);
-        return modelMapper.map(booking1, BookingDto.class);
+        Booking savedBooking = bookingRepository.save(booking);
+
+        UserDto userDto = userClient.getSingleUserForBooking(userId);
+
+        sendBookingNotification(savedBooking, eventDto, userDto);
+
+        return modelMapper.map(savedBooking, BookingDto.class);
     }
 
 

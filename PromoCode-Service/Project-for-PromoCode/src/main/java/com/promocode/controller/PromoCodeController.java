@@ -35,10 +35,18 @@ public class PromoCodeController {
 
     @GetMapping("/{promoCode}")
     @PreAuthorize("hasAnyRole('ADMIN','ROLE_NORMAL')")
-    public ResponseEntity<PromoCodeDto> getPromoCode(@PathVariable String promoCode) {
+    public ResponseEntity<PromoCodeDto> getPromoCodeById(@PathVariable String promoCode) {
         PromoCodeDto codeDto = promoCodeService.getPromoCode(promoCode);
         return new ResponseEntity<>(codeDto, HttpStatus.OK);
     }
+
+    @GetMapping("/internal/{promoCode}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<PromoCodeDto> getPromoCodeForBooking(@PathVariable String promoCode) {
+        PromoCodeDto codeDto = promoCodeService.getPromoCode(promoCode);
+        return new ResponseEntity<>(codeDto, HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{promoCode}")
     @PreAuthorize("hasRole('ADMIN')")

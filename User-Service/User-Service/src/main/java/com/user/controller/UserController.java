@@ -20,28 +20,35 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        UserDto userDto1 = userService.createUser(userDto);
-        return new ResponseEntity<>(userDto1, HttpStatus.CREATED);
+        UserDto createdUser = userService.createUser(userDto);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable String userId) {
-        UserDto userDto1 = userService.updateUser(userDto, userId);
-        return new ResponseEntity<>(userDto1, HttpStatus.OK);
+        UserDto updatedUser = userService.updateUser(userDto, userId);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getSingleUser(@PathVariable String userId) {
-        UserDto userDto = userService.getSingleUser(userId);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        UserDto singleUser = userService.getSingleUser(userId);
+        return new ResponseEntity<>(singleUser, HttpStatus.OK);
+    }
+
+    @GetMapping("/internal/{userId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserDto> getSingleUserForBooking(@PathVariable String userId) {
+        UserDto singleUser = userService.getSingleUser(userId);
+        return new ResponseEntity<>(singleUser, HttpStatus.OK);
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> userDto1 = userService.getAllUsers();
-        return new ResponseEntity<>(userDto1, HttpStatus.OK);
+        List<UserDto> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")

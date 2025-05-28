@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.booking</groupId>
@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>23</java.version>
+        <java.version>24</java.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
     </properties>
     <dependencies>
@@ -53,7 +53,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -66,6 +66,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>

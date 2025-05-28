@@ -10,7 +10,7 @@ import com.booking.dto.PromoCodeDto;
 @FeignClient(name = "PROJECT-FOR-PROMOCODE", configuration = FeignClientConfig.class)
 public interface PromoCodeClient {
 
-    @GetMapping("/promocode/{promoCode}")
-    public PromoCodeDto getPromoCodeById(@PathVariable String promoCode);
+    @GetMapping("/promocode/internal/{promoCode}")
+    public PromoCodeDto getPromoCodeForBooking(@PathVariable String promoCode);
 
 }

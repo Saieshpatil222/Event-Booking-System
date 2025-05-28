@@ -18,9 +18,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="Booking-Service" />
+        <module name="NotificationService" />
       </profile>
     </annotationProcessing>
   </component>
@@ -29,6 +30,7 @@
       <module name="API-GATEWAY" options="-parameters" />
       <module name="Booking-Service" options="-parameters" />
       <module name="Event-Service" options="-parameters" />
+      <module name="NotificationService" options="-parameters" />
       <module name="Project-for-PromoCode" options="-parameters" />
       <module name="ServiceRegistry" options="-parameters" />
       <module name="User-Service" options="-parameters" />
