@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDto, User.class);
         user.setUserId(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(List.of("ROLE_ADMIN"));
+        user.setRoles(List.of("ROLE_NORMAL"));
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDto.class);
 
@@ -40,29 +40,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getSingleUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
-        return modelMapper.map(user, UserDto.class);
+        User singleUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
+        return modelMapper.map(singleUser, UserDto.class);
     }
 
     @Override
     public List<UserDto> getAllUsers() {//use stream api because we need to map each record into dto so we need stream api
-        List<User> user = userRepository.findAll();
-        return user.stream().map(users -> modelMapper.map(users, UserDto.class)).collect(Collectors.toList());
+        List<User> allUsers = userRepository.findAll();
+        return allUsers.stream().map(users -> modelMapper.map(users, UserDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
-        user.setUserName(userDto.getUserName());
-        user.setEmailId(userDto.getEmailId());
-        user.setMobileNumber(userDto.getMobileNumber());
-        userRepository.save(user);
-        return modelMapper.map(user, UserDto.class);
+        User updatedUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
+        updatedUser.setUserName(userDto.getUserName());
+        updatedUser.setEmailId(userDto.getEmailId());
+        updatedUser.setMobileNumber(userDto.getMobileNumber());
+        userRepository.save(updatedUser);
+        return modelMapper.map(updatedUser, UserDto.class);
     }
 
     @Override
     public void deleteUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
-        userRepository.delete(user);
+        User deletedUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Not Found With Given UserId = " + userId));
+        userRepository.delete(deletedUser);
     }
 }

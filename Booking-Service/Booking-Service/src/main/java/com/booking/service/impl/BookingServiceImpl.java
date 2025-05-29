@@ -43,23 +43,16 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto createBooking(BookingDto bookingDto, String eventId, String userId, String promoCodeId) {
-
         Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
-
         Booking booking = modelMapper.map(bookingDto, Booking.class);
-
         booking.setEventId(eventId);
-
         booking.setUserId(userId);
-
         booking.setBookingId(UUID.randomUUID().toString());
-
         EventDto eventDto = eventClient.getEventForBooking(eventId);
 
         logger.info("Event : {} ", eventDto);
 
         PromoCodeDto promoCodeDto = promoCodeClient.getPromoCodeForBooking(promoCodeId);
-
         booking.setPromoCode(promoCodeDto.getPromoCode());
 
         logger.info("PromoCode: {}", promoCodeDto);
@@ -71,11 +64,9 @@ public class BookingServiceImpl implements BookingService {
                 eventDto.setSeats(eventDto.getSeats() - booking.getNumberOfTickets());
                 eventClient.updateEventForBooking(eventDto, eventDto.getEventId());
             }
-
             if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
                 throw new IncorrectAmountException("Please Enter the Correct Amount.");
             }
-
         }
 
         if (Objects.equals(promoCodeDto.getPromoCode(), booking.getPromoCode())) {
@@ -83,6 +74,9 @@ public class BookingServiceImpl implements BookingService {
             int updatedPrice = price - promoCodeDto.getDiscount();
             booking.setPrice(updatedPrice);
         }
+
+        //call to payment gateway
+
         booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
         Booking savedBooking = bookingRepository.save(booking);
@@ -92,7 +86,6 @@ public class BookingServiceImpl implements BookingService {
         logger.info("USER:{}", userDto);
 
         sendBookingNotification(savedBooking, eventDto, userDto);
-
         return modelMapper.map(savedBooking, BookingDto.class);
     }
 
@@ -155,19 +148,19 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void deleteBooking(String bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingNotFoundException("Booking Not Found With Given Id" + bookingId));
-        bookingRepository.delete(booking);
+        Booking deletedBooking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingNotFoundException("Booking Not Found With Given Id" + bookingId));
+        bookingRepository.delete(deletedBooking);
     }
 
     @Override
     public BookingDto getSingleBooking(String bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingNotFoundException("Booking Not Found"));
-        return modelMapper.map(booking, BookingDto.class);
+        Booking singleBooking = bookingRepository.findById(bookingId).orElseThrow(() -> new BookingNotFoundException("Booking Not Found"));
+        return modelMapper.map(singleBooking, BookingDto.class);
     }
 
     @Override
     public List<BookingDto> getAllBookings() {
-        List<Booking> bookings = bookingRepository.findAll();
-        return bookings.stream().map(booking -> modelMapper.map(booking, BookingDto.class)).collect(Collectors.toList());
+        List<Booking> allBookings = bookingRepository.findAll();
+        return allBookings.stream().map(booking -> modelMapper.map(booking, BookingDto.class)).collect(Collectors.toList());
     }
 }
