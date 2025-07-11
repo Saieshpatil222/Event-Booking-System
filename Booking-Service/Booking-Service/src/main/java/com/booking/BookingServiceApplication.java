@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-
+@EnableAsync
 public class BookingServiceApplication {
 
     public static void main(String[] args) {

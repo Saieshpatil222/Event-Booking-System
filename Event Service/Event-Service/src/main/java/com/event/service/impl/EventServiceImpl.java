@@ -34,20 +34,20 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getAllEvents() {
-        List<Event> event = eventRepository.findAll();
-        return event.stream().map(events -> modelMapper.map(events, EventDto.class)).collect(Collectors.toList());
+        List<Event> allEvents = eventRepository.findAll();
+        return allEvents.stream().map(events -> modelMapper.map(events, EventDto.class)).collect(Collectors.toList());
     }
 
     @Override
     public EventDto getSingleEvent(String eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found"));
-        return modelMapper.map(event, EventDto.class);
+        Event singleEvent = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found"));
+        return modelMapper.map(singleEvent, EventDto.class);
     }
 
     @Override
     public void deleteEvent(String eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found With " + eventId));
-        eventRepository.delete(event);
+        Event deletdEvent = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found With " + eventId));
+        eventRepository.delete(deletdEvent);
     }
 
     @Override

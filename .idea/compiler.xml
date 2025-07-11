@@ -13,7 +13,7 @@
         <module name="Event-Service" />
         <module name="User-Service" />
       </profile>
-      <profile name="Annotation profile for Booking-Service" enabled="true">
+      <profile name="Annotation profile for NotificationService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -24,6 +24,9 @@
         <module name="NotificationService" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Payment-Gateway" target="24" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -31,6 +34,7 @@
       <module name="Booking-Service" options="-parameters" />
       <module name="Event-Service" options="-parameters" />
       <module name="NotificationService" options="-parameters" />
+      <module name="Payment-Gateway" options="-parameters" />
       <module name="Project-for-PromoCode" options="-parameters" />
       <module name="ServiceRegistry" options="-parameters" />
       <module name="User-Service" options="-parameters" />

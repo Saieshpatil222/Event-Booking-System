@@ -1,6 +1,7 @@
 package com.booking.entity;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,6 +9,7 @@ import java.awt.print.Book;
 
 @Builder
 @Document
+@Getter
 public class Booking {
 
     @Id

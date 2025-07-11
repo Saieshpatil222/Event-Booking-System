@@ -1,8 +1,6 @@
 package com.booking.service;
 
-import com.booking.dto.BookingDto;
-import com.booking.dto.EventDto;
-import com.booking.dto.PromoCodeDto;
+import com.booking.dto.*;
 import com.booking.entity.Booking;
 import com.booking.exception.IncorrectAmountException;
 import com.booking.exception.InsufficientSeatsException;
@@ -12,14 +10,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -38,10 +39,16 @@ public class BookingServiceTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ApiClient apiClient;
+    private EventClient eventClient;
 
     @Mock
     private PromoCodeClient promoCodeClient;
+
+    @Mock
+    private NotificationClient notificationClient;
+
+    @Mock
+    private UserClient userClient;
 
     private BookingDto bookingDto;
     private Booking booking;
@@ -66,7 +73,6 @@ public class BookingServiceTest {
         eventDto.setEventId("event123");
         eventDto.setSeats(10);
         eventDto.setEventPrice(200);
-        eventDto.setAddress("123 Event Street");
 
         promoCodeDto = new PromoCodeDto();
         promoCodeDto.setPromoCode("DISCOUNT10");
@@ -74,71 +80,155 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void createBookingTest() {
+    public void createBooking_withPromoCode_success() {
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setNumberOfTickets(2);
+        bookingDto.setPrice(200);
+        bookingDto.setStatus("CONFIRMED");
+
+        Booking booking = new Booking();
+        booking.setNumberOfTickets(2);
+        booking.setPrice(100);
+        booking.setStatus("CONFIRMED");
+
+        EventDto eventDto = new EventDto();
+        eventDto.setEventId("event123");
+        eventDto.setEventPrice(100);
+        eventDto.setSeats(100);
+        eventDto.setEventName("Test Event");
+        eventDto.setVenue("London");
+
+        PromoCodeDto promoCodeDto = new PromoCodeDto();
+        promoCodeDto.setPromoCode("PROMO10");
+        promoCodeDto.setDiscount(50);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserName("Test User");
+        userDto.setEmailId("test@example.com");
+
+        Booking savedBooking = new Booking();
+        savedBooking.setBookingId("book123");
+        savedBooking.setNumberOfTickets(2);
+        savedBooking.setPrice(150); // (2*100 - 50)
+        savedBooking.setStatus("CONFIRMED");
+        savedBooking.setVenue("London");
+        savedBooking.setPromoCode("PROMO10");
 
         BookingDto savedBookingDto = new BookingDto();
+        savedBookingDto.setBookingId("book123");
         savedBookingDto.setNumberOfTickets(2);
-        savedBookingDto.setPrice(200);
+        savedBookingDto.setPrice(150);
         savedBookingDto.setStatus("CONFIRMED");
+        savedBookingDto.setPromoCode("PROMO10");
         savedBookingDto.setEventId("event123");
-        savedBookingDto.setPromoCode("DISCOUNT10");
 
         when(modelMapper.map(bookingDto, Booking.class)).thenReturn(booking);
-        when(apiClient.getEventById("event123")).thenReturn(eventDto);
-        when(promoCodeClient.getPromoCodeById("promo123")).thenReturn(promoCodeDto);
-        when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
-        when(modelMapper.map(any(Booking.class), eq(BookingDto.class))).thenReturn(savedBookingDto);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(savedBooking);
+        when(eventClient.getEventForBooking("event123")).thenReturn(eventDto);
+        when(promoCodeClient.getPromoCodeForBooking("promo123")).thenReturn(promoCodeDto);
+        when(userClient.getSingleUserForBooking("user123")).thenReturn(userDto);
+        when(modelMapper.map(savedBooking, BookingDto.class)).thenReturn(savedBookingDto);
 
-        BookingDto savedBooking = bookingService.createBooking(bookingDto, "event123", "user123", "promo123");
 
-        verify(apiClient, times(1)).getEventById("event123");
-        verify(promoCodeClient, times(1)).getPromoCodeById("promo123");
+        BookingDto result = bookingService.createBooking(bookingDto, "event123", "user123", "promo123");
+
         verify(bookingRepository, times(1)).save(any(Booking.class));
 
-        assertNotNull(savedBooking);
-        assertEquals(bookingDto.getNumberOfTickets(), savedBooking.getNumberOfTickets());
-        assertEquals(bookingDto.getPrice(), savedBooking.getPrice());
-        assertEquals(bookingDto.getStatus(), savedBooking.getStatus());
-        assertEquals(eventDto.getEventId(), savedBooking.getEventId());
-        assertEquals(promoCodeDto.getPromoCode(), savedBooking.getPromoCode());
+        verify(eventClient).updateEventForBooking(any(EventDto.class), eq("event123"));
+
+        ArgumentCaptor<BookingNotificationDto> captor = ArgumentCaptor.forClass(BookingNotificationDto.class);
+        verify(notificationClient).sendBookingNotification(captor.capture());
+        BookingNotificationDto capturedDto = captor.getValue();
+
+        assertEquals("Test User", capturedDto.getUserName());
+        assertEquals("test@example.com", capturedDto.getEmail());
+        assertEquals("Test Event", capturedDto.getEventName());
+        assertEquals("London", capturedDto.getVenue());
+
+        assertNotNull(result);
+        assertEquals(2, result.getNumberOfTickets());
+        assertEquals(150, result.getPrice());
+        assertEquals("CONFIRMED", result.getStatus());
+        assertEquals("PROMO10", result.getPromoCode());
     }
+
 
     @Test
-    public void createBookingWithoutPromoCodeTest() {
-        BookingDto savedBookingDto = new BookingDto();
-        savedBookingDto.setNumberOfTickets(2);
-        savedBookingDto.setPrice(200);
-        savedBookingDto.setStatus("CONFIRMED");
-        savedBookingDto.setEventId("event123");
+    public void createBookingWithoutPromoCode_Success() {
+        BookingDto bookingDto = new BookingDto();
+        bookingDto.setNumberOfTickets(2);
+        bookingDto.setPrice(100); // per ticket
+        bookingDto.setStatus("CONFIRMED");
 
-        Mockito.when(modelMapper.map(bookingDto, Booking.class)).thenReturn(booking);
-        Mockito.when(apiClient.getEventById(Mockito.anyString())).thenReturn(eventDto);
-        Mockito.when(bookingRepository.save(any(Booking.class))).thenReturn(booking);
-        Mockito.when(modelMapper.map(Mockito.any(Booking.class), eq(BookingDto.class))).thenReturn(savedBookingDto);
+        EventDto eventDto = new EventDto();
+        eventDto.setEventId("event123");
+        eventDto.setEventPrice(100);
+        eventDto.setSeats(10);
+        eventDto.setVenue("London");
+        eventDto.setEventName("Test Event");
 
-        BookingDto savedBookingDto1 = bookingService.createBookingWithoutPromoCode(bookingDto, "event123", "user123");
+        UserDto userDto = new UserDto();
+        userDto.setUserName("Test User");
+        userDto.setEmailId("test@example.com");
 
-        Mockito.verify(apiClient, Mockito.times(1)).getEventById("event123");
-        Mockito.verify(bookingRepository, Mockito.times(1)).save(any(Booking.class));
+        Booking bookingEntity = new Booking();
+        bookingEntity.setBookingId("booking123");
+        bookingEntity.setNumberOfTickets(2);
+        bookingEntity.setPrice(100); // set by service
+        bookingEntity.setStatus("CONFIRMED");
+        bookingEntity.setVenue("London");
+        bookingEntity.setPromoCode("");
 
-        Assertions.assertNotNull(savedBookingDto1);
-        assertEquals(bookingDto.getNumberOfTickets(), savedBookingDto1.getNumberOfTickets());
-        assertEquals(bookingDto.getPrice(), savedBookingDto1.getPrice());
-        assertEquals(bookingDto.getStatus(), savedBookingDto1.getStatus());
-        assertEquals(eventDto.getEventId(), savedBookingDto1.getEventId());
+        BookingDto savedDto = new BookingDto();
+        savedDto.setBookingId("booking123");
+        savedDto.setNumberOfTickets(2);
+        savedDto.setPrice(200);
+        savedDto.setStatus("CONFIRMED");
+        savedDto.setVenue("London");
+        savedDto.setPromoCode("");
+
+        when(modelMapper.map(any(BookingDto.class), eq(Booking.class))).thenReturn(bookingEntity);
+        when(eventClient.getEventForBooking("event123")).thenReturn(eventDto);
+        when(userClient.getSingleUserForBooking("user123")).thenReturn(userDto);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(bookingEntity);
+        when(modelMapper.map(any(Booking.class), eq(BookingDto.class))).thenReturn(savedDto);
+
+        BookingDto result = bookingService.createBookingWithoutPromoCode(bookingDto, "event123", "user123");
+
+        ArgumentCaptor<BookingNotificationDto> captor = ArgumentCaptor.forClass(BookingNotificationDto.class);
+        verify(notificationClient).sendBookingNotification(captor.capture());
+        BookingNotificationDto notification = captor.getValue();
+
+        assertEquals("Test User", notification.getUserName());
+        assertEquals("test@example.com", notification.getEmail());
+        assertEquals("Test Event", notification.getEventName());
+        assertEquals("London", notification.getVenue());
+
+        verify(eventClient).getEventForBooking("event123");
+        verify(eventClient).updateEventForBooking(any(EventDto.class), eq("event123"));
+        verify(userClient).getSingleUserForBooking("user123");
+        verify(bookingRepository).save(any(Booking.class));
+
+        assertNotNull(result);
+        assertEquals(2, result.getNumberOfTickets());
+        assertEquals(200, result.getPrice()); // total price calculated
+        assertEquals("CONFIRMED", result.getStatus());
+        assertEquals("London", result.getVenue());
+        assertEquals("", result.getPromoCode());
     }
+
 
     @Test
     public void createInsufficientSeatsTest() {
         eventDto.setSeats(1);
         when(modelMapper.map(bookingDto, Booking.class)).thenReturn(booking);
-        when(apiClient.getEventById("event123")).thenReturn(eventDto);
-        when(promoCodeClient.getPromoCodeById("promo123")).thenReturn(promoCodeDto);
+        when(eventClient.getEventForBooking("event123")).thenReturn(eventDto);
+        when(promoCodeClient.getPromoCodeForBooking("promo123")).thenReturn(promoCodeDto);
 
         InsufficientSeatsException insufficientSeatsException = assertThrows(InsufficientSeatsException.class, () -> bookingService.createBooking(bookingDto, "event123", "user123", "promo123"));
 
         assertEquals("Seat Number Exceeded", insufficientSeatsException.getMessage());
-        verify(apiClient, times(1)).getEventById("event123");
+        verify(eventClient, times(1)).getEventForBooking("event123");
     }
 
     @Test
@@ -146,13 +236,13 @@ public class BookingServiceTest {
         bookingDto.setPrice(123);
         booking.setPrice(123);
         when(modelMapper.map(bookingDto, Booking.class)).thenReturn(booking);
-        when(apiClient.getEventById("event123")).thenReturn(eventDto);
-        when(promoCodeClient.getPromoCodeById("promo123")).thenReturn(promoCodeDto);
+        when(eventClient.getEventForBooking("event123")).thenReturn(eventDto);
+        when(promoCodeClient.getPromoCodeForBooking("promo123")).thenReturn(promoCodeDto);
 
         IncorrectAmountException incorrectAmountException = assertThrows(IncorrectAmountException.class, () -> bookingService.createBooking(bookingDto, "event123", "user123", "promo123"));
 
         assertEquals("Please enter the correct amount.", incorrectAmountException.getMessage());
-        verify(apiClient, times(1)).getEventById("event123");
+        verify(eventClient, times(1)).getEventForBooking("event123");
     }
 
     @Test
@@ -197,7 +287,7 @@ public class BookingServiceTest {
         List<BookingDto> bookingDtoList = bookingService.getAllBookings();
 
         Assertions.assertNotNull(bookingDtoList);
-        Assertions.assertEquals(booking.getAddress(), bookingDto.getAddress());
+        Assertions.assertEquals(booking.getVenue(), bookingDto.getVenue());
     }
 
     @Test

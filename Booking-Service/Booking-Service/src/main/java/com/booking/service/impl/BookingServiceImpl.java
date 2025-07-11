@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,11 +49,11 @@ public class BookingServiceImpl implements BookingService {
         booking.setEventId(eventId);
         booking.setUserId(userId);
         booking.setBookingId(UUID.randomUUID().toString());
-        EventDto eventDto = eventClient.getEventForBooking(eventId);
+        EventDto eventDto = getEventForBooking(eventId);
 
         logger.info("Event : {} ", eventDto);
 
-        PromoCodeDto promoCodeDto = promoCodeClient.getPromoCodeForBooking(promoCodeId);
+        PromoCodeDto promoCodeDto = getPromoCodeForBooking(promoCodeId);
         booking.setPromoCode(promoCodeDto.getPromoCode());
 
         logger.info("PromoCode: {}", promoCodeDto);
@@ -65,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
                 eventClient.updateEventForBooking(eventDto, eventDto.getEventId());
             }
             if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
-                throw new IncorrectAmountException("Please Enter the Correct Amount.");
+                throw new IncorrectAmountException("Please enter the correct amount.");
             }
         }
 
@@ -75,7 +76,6 @@ public class BookingServiceImpl implements BookingService {
             booking.setPrice(updatedPrice);
         }
 
-        //call to payment gateway
 
         booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
@@ -90,10 +90,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
 
-    private void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
-        BookingNotificationDto notificationDto = new BookingNotificationDto();
-        logger.info("Sending booking notification in thread: {}", Thread.currentThread().getName());
+    private EventDto getEventForBooking(String eventId) {
+        return eventClient.getEventForBooking(eventId);
+    }
 
+    private PromoCodeDto getPromoCodeForBooking(String promoCodeId) {
+        return promoCodeClient.getPromoCodeForBooking(promoCodeId);
+    }
+
+    @Async("taskExecutor")
+    public void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
+        System.out.println("Thread name:" + Thread.currentThread());
+        BookingNotificationDto notificationDto = new BookingNotificationDto();
         notificationDto.setEventName(eventDto.getEventName());
         notificationDto.setEmail(userDto.getEmailId());
         notificationDto.setNumberOfTickets(booking.getNumberOfTickets());
@@ -101,7 +109,6 @@ public class BookingServiceImpl implements BookingService {
         notificationDto.setUserName(userDto.getUserName());
         notificationDto.setStatus(booking.getStatus());
         notificationDto.setVenue(booking.getVenue());
-
         notificationClient.sendBookingNotification(notificationDto);
     }
 
@@ -117,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setBookingId(UUID.randomUUID().toString());
 
-        EventDto eventDto = eventClient.getEventForBooking(eventId);
+        EventDto eventDto = getEventForBooking(eventId);
         logger.info("Event : {} ", eventDto);
 
         if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
@@ -128,13 +135,18 @@ public class BookingServiceImpl implements BookingService {
                 eventClient.updateEventForBooking(eventDto, eventDto.getEventId());
             }
 
-            if (booking.getPrice() > eventDto.getEventPrice() || booking.getPrice() < eventDto.getEventPrice()) {
+            int totalPrice = booking.getNumberOfTickets() * eventDto.getEventPrice();
+
+            if (booking.getPrice() != eventDto.getEventPrice()) {
                 throw new IncorrectAmountException("Please enter the correct amount.");
             }
+
+            booking.setPrice(totalPrice);
 
         }
         booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
+
         booking.setPromoCode("");
         Booking savedBooking = bookingRepository.save(booking);
 
