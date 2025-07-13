@@ -11,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +22,9 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
 
     Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
+
+    @Autowired
+    private BookingNotificationService bookingNotificationService;
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -58,7 +60,9 @@ public class BookingServiceImpl implements BookingService {
 
         logger.info("PromoCode: {}", promoCodeDto);
 
-        if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
+        //Objects.equals(booking.getEventId(), eventDto.getEventId())
+
+        if (booking.getEventId().equals(eventDto.getEventId())) {
             if (booking.getNumberOfTickets() > eventDto.getSeats()) {
                 throw new InsufficientSeatsException("Seat Number Exceeded");
             } else {
@@ -70,7 +74,9 @@ public class BookingServiceImpl implements BookingService {
             }
         }
 
-        if (Objects.equals(promoCodeDto.getPromoCode(), booking.getPromoCode())) {
+        //Objects.equals(promoCodeDto.getPromoCode(), booking.getPromoCode())
+
+        if (promoCodeDto.getPromoCode().equals(booking.getPromoCode())) {
             int price = eventDto.getEventPrice() * bookingDto.getNumberOfTickets();
             int updatedPrice = price - promoCodeDto.getDiscount();
             booking.setPrice(updatedPrice);
@@ -85,7 +91,7 @@ public class BookingServiceImpl implements BookingService {
 
         logger.info("USER:{}", userDto);
 
-        sendBookingNotification(savedBooking, eventDto, userDto);
+        bookingNotificationService.sendBookingNotification(savedBooking, eventDto, userDto);
         return modelMapper.map(savedBooking, BookingDto.class);
     }
 
@@ -98,19 +104,19 @@ public class BookingServiceImpl implements BookingService {
         return promoCodeClient.getPromoCodeForBooking(promoCodeId);
     }
 
-    @Async("taskExecutor")
-    public void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
-        System.out.println("Thread name:" + Thread.currentThread());
-        BookingNotificationDto notificationDto = new BookingNotificationDto();
-        notificationDto.setEventName(eventDto.getEventName());
-        notificationDto.setEmail(userDto.getEmailId());
-        notificationDto.setNumberOfTickets(booking.getNumberOfTickets());
-        notificationDto.setPrice(booking.getPrice());
-        notificationDto.setUserName(userDto.getUserName());
-        notificationDto.setStatus(booking.getStatus());
-        notificationDto.setVenue(booking.getVenue());
-        notificationClient.sendBookingNotification(notificationDto);
-    }
+//    @Async("taskExecutor")
+//    public void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
+//        System.out.println("Thread name:" + Thread.currentThread());
+//        BookingNotificationDto notificationDto = new BookingNotificationDto();
+//        notificationDto.setEventName(eventDto.getEventName());
+//        notificationDto.setEmail(userDto.getEmailId());
+//        notificationDto.setNumberOfTickets(booking.getNumberOfTickets());
+//        notificationDto.setPrice(booking.getPrice());
+//        notificationDto.setUserName(userDto.getUserName());
+//        notificationDto.setStatus(booking.getStatus());
+//        notificationDto.setVenue(booking.getVenue());
+//        notificationClient.sendBookingNotification(notificationDto);
+//    }
 
 
     @Override
@@ -127,7 +133,7 @@ public class BookingServiceImpl implements BookingService {
         EventDto eventDto = getEventForBooking(eventId);
         logger.info("Event : {} ", eventDto);
 
-        if (Objects.equals(booking.getEventId(), eventDto.getEventId())) {
+        if (booking.getEventId().equals(eventDto.getEventId())) {
             if (booking.getNumberOfTickets() > eventDto.getSeats()) {
                 throw new InsufficientSeatsException("Seat Number Exceeded");
             } else {
@@ -152,7 +158,7 @@ public class BookingServiceImpl implements BookingService {
 
         UserDto userDto = userClient.getSingleUserForBooking(userId);
 
-        sendBookingNotification(savedBooking, eventDto, userDto);
+        bookingNotificationService.sendBookingNotification(savedBooking, eventDto, userDto);
 
         return modelMapper.map(savedBooking, BookingDto.class);
     }

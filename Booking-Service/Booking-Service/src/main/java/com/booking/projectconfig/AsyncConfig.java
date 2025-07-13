@@ -15,7 +15,7 @@ public class AsyncConfig {
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("AsyncNotification-");
+        executor.setThreadNamePrefix("NotificationThread-");
         executor.initialize();
         return executor;
     }
