@@ -1,7 +1,9 @@
 package com.booking.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +12,8 @@ import java.awt.print.Book;
 @Builder
 @Document
 @Getter
+@Setter
+@AllArgsConstructor
 public class Booking {
 
     @Id
@@ -27,6 +31,8 @@ public class Booking {
 
     private String status;
 
+    private boolean isPaid;
+
     private String promoCode;
 
     private String venue;
@@ -42,7 +48,6 @@ public class Booking {
         this.eventName = eventName;
         this.numberOfTickets = numberOfTickets;
         this.price = price;
-        this.status = status;
         this.promoCode = promoCode;
         this.venue = venue;
     }
@@ -95,11 +100,6 @@ public class Booking {
         this.numberOfTickets = numberOfTickets;
     }
 
-
-    public String getStatus() {
-        return status;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -107,11 +107,6 @@ public class Booking {
     public void setPrice(int price) {
         this.price = price;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
 
     public String getPromoCode() {
         return promoCode;

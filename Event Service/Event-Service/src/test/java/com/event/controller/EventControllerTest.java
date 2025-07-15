@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -25,8 +26,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EventControllerTest {
@@ -134,4 +134,28 @@ public class EventControllerTest {
                 .andDo(print());
         verify(eventService, times(1)).updateEvent(eq(eventId), any(EventDto.class));
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN") // Simulates a user with ADMIN role
+    public void testGetEventImage() throws Exception {
+        String eventId = "abc123";
+        byte[] imageBytes = "dummy image".getBytes();
+        String imageType = "image/png";
+
+        EventDto eventDto = new EventDto();
+        eventDto.setEventImage(imageBytes);
+        eventDto.setEventImageType(imageType);
+
+        when(eventService.getEventImage(eventId)).thenReturn(eventDto);
+
+        mockMvc.perform(get("/event/image/{eventId}", eventId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(imageType))
+                .andExpect(content().bytes(imageBytes));
+    }
+
+//    @Test
+//    public void createImage(){
+//        EventDto eventDto = EventDto.builder().eventId("123").eventImage().build();
+//    }
 }

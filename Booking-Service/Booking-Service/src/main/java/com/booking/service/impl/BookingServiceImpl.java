@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -60,8 +59,6 @@ public class BookingServiceImpl implements BookingService {
 
         logger.info("PromoCode: {}", promoCodeDto);
 
-        //Objects.equals(booking.getEventId(), eventDto.getEventId())
-
         if (booking.getEventId().equals(eventDto.getEventId())) {
             if (booking.getNumberOfTickets() > eventDto.getSeats()) {
                 throw new InsufficientSeatsException("Seat Number Exceeded");
@@ -74,16 +71,14 @@ public class BookingServiceImpl implements BookingService {
             }
         }
 
-        //Objects.equals(promoCodeDto.getPromoCode(), booking.getPromoCode())
-
         if (promoCodeDto.getPromoCode().equals(booking.getPromoCode())) {
             int price = eventDto.getEventPrice() * bookingDto.getNumberOfTickets();
             int updatedPrice = price - promoCodeDto.getDiscount();
             booking.setPrice(updatedPrice);
+
         }
 
 
-        booking.setStatus(bookingDto.getStatus());
         booking.setVenue(eventDto.getVenue());
         Booking savedBooking = bookingRepository.save(booking);
 
@@ -103,21 +98,6 @@ public class BookingServiceImpl implements BookingService {
     private PromoCodeDto getPromoCodeForBooking(String promoCodeId) {
         return promoCodeClient.getPromoCodeForBooking(promoCodeId);
     }
-
-//    @Async("taskExecutor")
-//    public void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto) {
-//        System.out.println("Thread name:" + Thread.currentThread());
-//        BookingNotificationDto notificationDto = new BookingNotificationDto();
-//        notificationDto.setEventName(eventDto.getEventName());
-//        notificationDto.setEmail(userDto.getEmailId());
-//        notificationDto.setNumberOfTickets(booking.getNumberOfTickets());
-//        notificationDto.setPrice(booking.getPrice());
-//        notificationDto.setUserName(userDto.getUserName());
-//        notificationDto.setStatus(booking.getStatus());
-//        notificationDto.setVenue(booking.getVenue());
-//        notificationClient.sendBookingNotification(notificationDto);
-//    }
-
 
     @Override
     public BookingDto createBookingWithoutPromoCode(BookingDto bookingDto, String eventId, String userId) {

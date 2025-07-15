@@ -66,16 +66,14 @@ public class EventServiceImpl implements EventService {
         byte[] imageBytes = multipartFile.getBytes();
         event.setEventImage(imageBytes);
         event.setEventImageType(multipartFile.getContentType());
-        Event savedEvent = eventRepository.save(event);
-        return modelMapper.map(savedEvent, EventDto.class);
+        Event savedEventImage = eventRepository.save(event);
+        return modelMapper.map(savedEventImage, EventDto.class);
     }
 
     @Override
     public EventDto getEventImage(String eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
-        return modelMapper.map(event, EventDto.class);
+        Event eventImage = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        return modelMapper.map(eventImage, EventDto.class);
     }
-
 
 }

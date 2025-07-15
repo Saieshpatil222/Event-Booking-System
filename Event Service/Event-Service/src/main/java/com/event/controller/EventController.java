@@ -24,15 +24,15 @@ public class EventController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) {
-        EventDto eventDto1 = eventService.createEvent(eventDto);
-        return new ResponseEntity<>(eventDto1, HttpStatus.CREATED);
+        EventDto createdEvent = eventService.createEvent(eventDto);
+        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<EventDto>> getAllEvents() {
-        List<EventDto> eventDtos = eventService.getAllEvents();
-        return new ResponseEntity<>(eventDtos, HttpStatus.OK);
+        List<EventDto> allEvents = eventService.getAllEvents();
+        return new ResponseEntity<>(allEvents, HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
@@ -85,7 +85,6 @@ public class EventController {
         if (eventDTO.getEventImage() == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType(eventDTO.getEventImageType()))
-                .body(eventDTO.getEventImage());
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(eventDTO.getEventImageType())).body(eventDTO.getEventImage());
     }
 }

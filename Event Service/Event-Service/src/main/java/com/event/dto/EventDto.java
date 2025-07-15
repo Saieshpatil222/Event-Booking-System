@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 
 
+@Getter
 @Builder
+@Setter
 public class EventDto {
 
     private String eventId;
@@ -40,64 +42,32 @@ public class EventDto {
         this.eventImageType = eventImageType;
     }
 
-    public byte[] getEventImage() {
-        return eventImage;
-    }
-
     public void setEventImage(byte[] eventImage) {
         this.eventImage = eventImage;
-    }
-
-    public String getEventImageType() {
-        return eventImageType;
     }
 
     public void setEventImageType(String eventImageType) {
         this.eventImageType = eventImageType;
     }
 
-    public String getEventId() {
-        return eventId;
-    }
-
     public void setEventId(String eventId) {
         this.eventId = eventId;
-    }
-
-    public String getEventName() {
-        return eventName;
     }
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
 
-    public int getEventPrice() {
-        return eventPrice;
-    }
-
     public void setEventPrice(int eventPrice) {
         this.eventPrice = eventPrice;
-    }
-
-    public Date getEventSchedule() {
-        return eventSchedule;
     }
 
     public void setEventSchedule(Date eventSchedule) {
         this.eventSchedule = eventSchedule;
     }
 
-    public int getSeats() {
-        return seats;
-    }
-
     public void setSeats(int seats) {
         this.seats = seats;
-    }
-
-    public String getVenue() {
-        return venue;
     }
 
     public void setVenue(String venue) {

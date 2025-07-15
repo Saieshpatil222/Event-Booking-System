@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDto, User.class);
         user.setUserId(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(List.of("ROLE_NORMAL"));
+        user.setRoles(List.of("ROLE_ADMIN"));
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserDto.class);
 

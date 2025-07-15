@@ -1,5 +1,14 @@
 package com.booking.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@ToString
 public class BookingDto {
 
     private String bookingId;
@@ -13,6 +22,8 @@ public class BookingDto {
     private int numberOfTickets;
 
     private int price;
+
+    private boolean isPaid;
 
     private String status;
 
@@ -31,7 +42,6 @@ public class BookingDto {
         this.eventName = eventName;
         this.numberOfTickets = numberOfTickets;
         this.price = price;
-        this.status = status;
         this.eventId = eventId;
         this.promoCode = promoCode;
     }
@@ -50,14 +60,6 @@ public class BookingDto {
 
     public void setPromoCode(String promoCode) {
         this.promoCode = promoCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getBookingId() {
@@ -108,17 +110,4 @@ public class BookingDto {
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return "BookingDto{" +
-                "bookingId='" + bookingId + '\'' +
-                ", userId='" + userId + '\'' +
-                ", eventId='" + eventId + '\'' +
-                ", eventName='" + eventName + '\'' +
-                ", numberOfTickets=" + numberOfTickets +
-                ", price=" + price +
-                ", status='" + status + '\'' +
-                ", promoCode='" + promoCode + '\'' +
-                '}';
-    }
 }

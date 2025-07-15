@@ -22,8 +22,8 @@ public class PromoCodeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PromoCodeDto> createPromoCode(@RequestBody PromoCodeDto promoCodeDto) {
         System.out.println("Received request to create promo code: " + promoCodeDto.getPromoCode());
-        PromoCodeDto promoCodeDto1 = promoCodeService.createPromoCode(promoCodeDto);
-        return new ResponseEntity<>(promoCodeDto1, HttpStatus.CREATED);
+        PromoCodeDto createdPromoCode = promoCodeService.createPromoCode(promoCodeDto);
+        return new ResponseEntity<>(createdPromoCode, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -52,8 +52,7 @@ public class PromoCodeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponseDto> deletePromoCode(@PathVariable("promoCode") String promoCodeId) {
         promoCodeService.deletePromoCode(promoCodeId);
-        ApiResponseDto apiResponseDto = ApiResponseDto.builder().message("PromoCode Deleted Successfully")
-                .status(HttpStatus.OK).success(true).build();
+        ApiResponseDto apiResponseDto = ApiResponseDto.builder().message("PromoCode Deleted Successfully").status(HttpStatus.OK).success(true).build();
         return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
 
     }
