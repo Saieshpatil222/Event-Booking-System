@@ -19,6 +19,34 @@ public class BookingNotificationDto {
 
     private String status;
 
+    public String getEventName() {
+        return eventName;
+    }
+
+    public int getNumberOfTickets() {
+        return numberOfTickets;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
     private String venue;
 
     private String email;

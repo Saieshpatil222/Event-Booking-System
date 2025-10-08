@@ -22,7 +22,7 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user/** , /auth/login
-        #            - Path=
+
         - id: PROJECT-FOR-PROMOCODE
           uri: lb://PROJECT-FOR-PROMOCODE
           predicates:

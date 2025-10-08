@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/Event_Dto/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -8,24 +11,36 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="API-GATEWAY" />
-        <module name="ServiceRegistry" />
         <module name="Project-for-PromoCode" />
+        <module name="EventDto" />
+        <module name="NotificationService" />
+        <module name="ServiceRegistry" />
         <module name="Event-Service" />
         <module name="User-Service" />
       </profile>
-      <profile name="Annotation profile for NotificationService" enabled="true">
+      <profile name="Annotation profile for Booking-Service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar" />
         </processorPath>
         <module name="Booking-Service" />
-        <module name="NotificationService" />
+      </profile>
+      <profile name="Annotation profile for PAYMENT-SERVICE" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+        </processorPath>
+        <module name="PAYMENT-SERVICE" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Event_Dto" target="1.8" />
       <module name="Payment-Gateway" target="24" />
+      <module name="Payment_Gateway" target="24" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -34,7 +49,9 @@
       <module name="Booking-Service" options="-parameters" />
       <module name="Event-Service" options="-parameters" />
       <module name="NotificationService" options="-parameters" />
+      <module name="PAYMENT-SERVICE" options="-parameters" />
       <module name="Payment-Gateway" options="-parameters" />
+      <module name="Payment_Gateway" options="-parameters" />
       <module name="Project-for-PromoCode" options="-parameters" />
       <module name="ServiceRegistry" options="-parameters" />
       <module name="User-Service" options="-parameters" />

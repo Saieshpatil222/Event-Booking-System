@@ -76,4 +76,18 @@ public class EventServiceImpl implements EventService {
         return modelMapper.map(eventImage, EventDto.class);
     }
 
+    @Override
+    public void updateSeatsAfterBooking(String eventId, int bookedTickets) {
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event Not Found with Given Id " + eventId));
+
+        if (event.getSeats() < bookedTickets) {
+            throw new IllegalStateException("Not enough seats available for event: " + eventId);
+        }
+
+        event.setSeats(event.getSeats() - bookedTickets);
+
+        Event updatedEvent = eventRepository.save(event);
+        modelMapper.map(updatedEvent, EventDto.class);
+    }
+
 }

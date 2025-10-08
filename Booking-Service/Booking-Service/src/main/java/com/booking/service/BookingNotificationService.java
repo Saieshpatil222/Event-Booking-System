@@ -10,5 +10,4 @@ public interface BookingNotificationService {
     @Async("taskExecutor")
     void sendBookingNotification(Booking booking, EventDto eventDto, UserDto userDto);
 
-
 }

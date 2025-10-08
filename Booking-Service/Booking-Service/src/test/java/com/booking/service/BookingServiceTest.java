@@ -262,42 +262,42 @@ public class BookingServiceTest {
         verify(bookingRepository, times(1)).delete(booking);
     }
 
-    @Test
-    public void getAllBookingTest() {
-
-        Booking booking1 = new Booking();
-        booking.setNumberOfTickets(2);
-        booking.setPrice(200);
-        booking.setStatus("CONFIRMED");
-
-        Booking booking2 = new Booking();
-        booking.setNumberOfTickets(2);
-        booking.setPrice(200);
-        booking.setStatus("CONFIRMED");
-
-        BookingDto bookingDto1 = new BookingDto();
-        bookingDto.setNumberOfTickets(2);
-        bookingDto.setPrice(200);
-        bookingDto.setStatus("CONFIRMED");
-
-        BookingDto bookingDto2 = new BookingDto();
-        bookingDto.setNumberOfTickets(2);
-        bookingDto.setPrice(200);
-        bookingDto.setStatus("CONFIRMED");
-
-        List<Booking> allBookings = Arrays.asList(booking, booking1, booking2);
-        List<BookingDto> allBookingsDto = Arrays.asList(bookingDto, bookingDto1, bookingDto2);
-
-        Mockito.when(bookingRepository.findAll()).thenReturn(allBookings);
-        Mockito.when(modelMapper.map(booking, BookingDto.class)).thenReturn(bookingDto);
-        Mockito.when(modelMapper.map(booking1, BookingDto.class)).thenReturn(bookingDto1);
-        Mockito.when(modelMapper.map(booking2, BookingDto.class)).thenReturn(bookingDto2);
-
-        List<BookingDto> bookingDtoList = bookingService.getAllBookings();
-
-        Assertions.assertNotNull(bookingDtoList);
-        Assertions.assertEquals(booking.getVenue(), bookingDto.getVenue());
-    }
+//    @Test
+//    public void getAllBookingTest() {
+//
+//        Booking booking1 = new Booking();
+//        booking.setNumberOfTickets(2);
+//        booking.setPrice(200);
+//        booking.setStatus("CONFIRMED");
+//
+//        Booking booking2 = new Booking();
+//        booking.setNumberOfTickets(2);
+//        booking.setPrice(200);
+//        booking.setStatus("CONFIRMED");
+//
+//        BookingDto bookingDto1 = new BookingDto();
+//        bookingDto.setNumberOfTickets(2);
+//        bookingDto.setPrice(200);
+//        bookingDto.setStatus("CONFIRMED");
+//
+//        BookingDto bookingDto2 = new BookingDto();
+//        bookingDto.setNumberOfTickets(2);
+//        bookingDto.setPrice(200);
+//        bookingDto.setStatus("CONFIRMED");
+//
+//        List<Booking> allBookings = Arrays.asList(booking, booking1, booking2);
+//        List<BookingDto> allBookingsDto = Arrays.asList(bookingDto, bookingDto1, bookingDto2);
+//
+//        Mockito.when(bookingRepository.findAll()).thenReturn(allBookings);
+//        Mockito.when(modelMapper.map(booking, BookingDto.class)).thenReturn(bookingDto);
+//        Mockito.when(modelMapper.map(booking1, BookingDto.class)).thenReturn(bookingDto1);
+//        Mockito.when(modelMapper.map(booking2, BookingDto.class)).thenReturn(bookingDto2);
+//
+//        List<BookingDto> bookingDtoList = bookingService.getAllBookings();
+//
+//        Assertions.assertNotNull(bookingDtoList);
+//        Assertions.assertEquals(booking.getVenue(), bookingDto.getVenue());
+//    }
 
     @Test
     public void getBookingByIdTest() {

@@ -1,0 +1,21 @@
+package com.payment.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class ApiResponseDto {
+
+    private HttpStatus httpStatus;
+
+    private String message;
+
+    private boolean success;
+
+}

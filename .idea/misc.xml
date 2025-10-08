@@ -14,10 +14,14 @@
         <option value="$PROJECT_DIR$/API-GATEWAY/pom.xml" />
         <option value="$PROJECT_DIR$/NotificationService/NotificationService/pom.xml" />
         <option value="$PROJECT_DIR$/Payment-Gateway/Payment-Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/Payment_Gateway/Payment_Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/PAYMENT-SERVICE/PAYMENT-SERVICE/pom.xml" />
+        <option value="$PROJECT_DIR$/Event_Dto/pom.xml" />
+        <option value="$PROJECT_DIR$/EventDto/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_24" default="true" project-jdk-name="openjdk-24" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/out" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$" />
   </component>
 </project>

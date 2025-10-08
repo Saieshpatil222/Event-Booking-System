@@ -1,23 +1,23 @@
 package com.booking.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.awt.print.Book;
 
 @Builder
-@Document
 @Getter
 @Setter
 @AllArgsConstructor
+@Entity
 public class Booking {
 
     @Id
     private String bookingId;
+
+    private String userName;
 
     private String userId;
 
@@ -31,8 +31,6 @@ public class Booking {
 
     private String status;
 
-    private boolean isPaid;
-
     private String promoCode;
 
     private String venue;
@@ -41,78 +39,5 @@ public class Booking {
 
     }
 
-    public Booking(String bookingId, String userId, String eventId, String eventName, int numberOfTickets, int price, String status, String promoCode, String venue) {
-        this.bookingId = bookingId;
-        this.userId = userId;
-        this.eventId = eventId;
-        this.eventName = eventName;
-        this.numberOfTickets = numberOfTickets;
-        this.price = price;
-        this.promoCode = promoCode;
-        this.venue = venue;
-    }
 
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String address) {
-        this.venue = address;
-    }
-
-    public String getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public int getNumberOfTickets() {
-        return numberOfTickets;
-    }
-
-    public void setNumberOfTickets(int numberOfTickets) {
-        this.numberOfTickets = numberOfTickets;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getPromoCode() {
-        return promoCode;
-    }
-
-    public void setPromoCode(String promoCode) {
-        this.promoCode = promoCode;
-    }
 }

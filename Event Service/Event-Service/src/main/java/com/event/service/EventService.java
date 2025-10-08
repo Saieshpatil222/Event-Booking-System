@@ -22,4 +22,6 @@ public interface EventService {
 
     EventDto getEventImage(String eventId);
 
+    void updateSeatsAfterBooking(String eventId, int bookedTickets);
+
 }
